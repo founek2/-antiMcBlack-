@@ -35,7 +35,7 @@ app.use(helmet.contentSecurityPolicy({
 }));
 app.use(helmet.referrerPolicy({ policy: 'origin' }));
 app.use(helmet());
-app.use(forceSsl); /** přesměrování na https **/
+process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

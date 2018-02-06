@@ -16,35 +16,32 @@ let certificate;
 if (process.env.NODE_ENV === 'production') {
     privateKey = fs.readFileSync('/etc/letsencrypt/live/skalicky-vps.spse-net.cz/privkey.pem', 'utf8');
     certificate = fs.readFileSync('/etc/letsencrypt/live/skalicky-vps.spse-net.cz/fullchain.pem', 'utf8');
-} else {
-    privateKey = fs.readFileSync('/home/martas/localhost-certs/key.pem', 'utf8');
-    certificate = fs.readFileSync('/home/martas/localhost-certs/server.crt', 'utf8');
+    var credentials = {
+        key: privateKey,
+        cert: certificate,
+      //  secureProtocol: 'TLSv1_2_method'
+    };
+    
+    
+    var port = normalizePort('4430');
+    app.set('port', port);
+    var server = https.createServer(credentials, app);
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
 }
 
-var credentials = {
-    key: privateKey,
-    cert: certificate,
-  //  secureProtocol: 'TLSv1_2_method'
-};
 
-
-var port = normalizePort('4430');
-app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = https.createServer(credentials, app);
 http.createServer(app).listen(8080);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
