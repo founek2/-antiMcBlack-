@@ -1,22 +1,17 @@
 var express = require('express');
 var path = require('path');
+var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var forceSsl = require('express-force-ssl');
-var ServiceData = require("./bin/serviceData");
+var requestProxy = require('express-request-proxy');
 var helmet = require('helmet');
 var RateLimit = require('express-rate-limit');
 var compression = require('compression');
 
-var apiLimiter = new RateLimit({
-    windowMs: 15*60*1000, // 15 minutes
-    max: 100,
-    delayMs: 0 // disabled
-});
-
-/** předání objectu do ROUTE **/
-var index = require('./routes/index');
+var ServiceData = require("./bin/serviceData");
+var routeApi = require('./routes/api');
+var routeIntranet = require('./routes/intranet');
 
 var app = express();
 
@@ -24,10 +19,12 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(compression());
 /** nastavení bezpečnostních hlaviček **/
-app.use(helmet.contentSecurityPolicy({
+ app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         styleSrc: ["'self'"]
@@ -36,15 +33,21 @@ app.use(helmet.contentSecurityPolicy({
 app.use(helmet.referrerPolicy({ policy: 'origin' }));
 app.use(helmet());
 process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'build')));
-app.use('/api/', apiLimiter); /** limit pro requesty kvůli přehlcení požadavky **/
-app.use('/api', index(new ServiceData()));
+app.use(express.static(path.join(__dirname, 'public')));
 
-
+var apiLimiter = new RateLimit({
+  windowMs: 15*60*1000, // 15 minutes
+  max: 100,
+  delayMs: 0 // disabled
+});
+app.use('/api/', apiLimiter);
+app.use('/api', routeApi(new ServiceData()));
+app.use('/intranet', routeIntranet);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

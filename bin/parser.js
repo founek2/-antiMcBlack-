@@ -109,10 +109,10 @@ Main.prototype.parser = function (win) {
             /** tato podmínka projde když v první buňce na řádku něco je = je tam třída **/
             if (currRow.cells[0].childNodes[0].innerHTML != undefined) {
                 var clas = currRow.cells[0].childNodes[0].innerHTML.trim();
-                if (classes.indexOf(clas) === -1) {
-                    /** když ji ještě nemám v poli tak si ji tam přidám (pouze kontrola kdyby se v suplu vyskytnula stejná třída 2x)**/
-                    classes.push(clas);
-                }
+          //      if (classes.indexOf(clas) === -1) {
+          //          /** když ji ještě nemám v poli tak si ji tam přidám (pouze kontrola kdyby se v suplu vyskytnula stejná třída 2x)**/
+          //          classes.push(clas);
+          //      }
 
                 this.main[date][clas] = [];
             }
