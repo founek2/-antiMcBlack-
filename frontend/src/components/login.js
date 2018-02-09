@@ -25,13 +25,12 @@ class Login extends Component {
 
     render() {
         return (
-            <div style={{ 'margin': 'auto', 'width': '50%' }}>
-                <Card>
-                    <CardTitle title='Login' titleColor={pink500} />
-                    <CardText>
+            <div >
+                <Card style={styles.loginCard}>
+                    <CardTitle title='McWhite' titleColor={pink500} />
+                    <CardText >
                         <TextField
                             type='username'
-                            id='username'
                             name='username'
                             floatingLabelText="Username"
                             floatingLabelStyle={styles.textColor}
@@ -43,7 +42,6 @@ class Login extends Component {
                         />
                         <TextField
                             type='password'
-                            id='password'
                             name='password'
                             floatingLabelText="Password"
                             floatingLabelStyle={styles.textColor}
@@ -54,8 +52,8 @@ class Login extends Component {
                             value={path(['inputs','password'],this.state)}                            
                         />
                     </CardText>
-                    <CardActions>
-                        <RaisedButton label="Login" secondary={true} />
+                    <CardActions style={styles.loginCardActions}>
+                        <RaisedButton label="Login"  />
                     </CardActions>
                 </Card>
             </div >
