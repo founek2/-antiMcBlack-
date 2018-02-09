@@ -16,4 +16,22 @@ export const styles = {
     underlineFocusStyle: {
         borderColor: purple600,
     },
+    loginCard: {
+        margin: 'auto',
+        width: '35%',
+        padding: "30px 10px 40px 10px",
+        textAlign: 'center',
+    },
+    loginCardActions: {
+        textAlign: 'center',
+    },
+    drawerContainer: {
+        position: 'relative',
+    },
+    appBarTitle: {
+
+    },
+    appBar: {
+
+    }
 };
