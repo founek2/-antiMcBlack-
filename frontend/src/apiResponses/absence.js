@@ -1,0 +1,18 @@
+export default {
+    "status": "success",
+    "response": {
+        "items": [{ //řádky .map
+            "header": { "value": "05. 02. 2018", "id": 1517785200000 },
+            "items": { 
+                "1": { "value": "MA", "kind": 0, "comment": ["předmět: matematika", "téma: Binomická věta"] },
+                "2": { "value": "HW", "kind": 0, "comment": ["předmět: hardware", "téma: RGB model, gamma křivka"] },
+                "3": { "value": "IN", "kind": 0, "comment": ["předmět: informatika", "téma: Úvod do AS3"] },
+                "4": { "value": "IN", "kind": 0, "comment": ["předmět: informatika", "téma: Úvod do AS3"] },
+                "5": { "value": "IN", "kind": 0, "comment": ["předmět: informatika", "téma: Úvod do AS3"] },
+                "7": { "value": "AJ", "kind": 0, "comment": ["předmět: anglický jazyk", "téma: Pardubice"] },
+                "8": { "value": "CM", "kind": 0, "comment": ["předmět: cvičení z matematiky", "téma: Goniometrie"] },
+                "9": { "value": "CM", "kind": 0, "comment": ["předmět: cvičení z matematiky", "téma: Goniometrie"] }
+            }
+        }, { "header": { "value": "06. 02. 2018", "id": 1517871600000 }, "items": [] }, { "header": { "value": "07. 02. 2018", "id": 1517958000000 }, "items": [{ "value": "MA", "kind": 0, "comment": ["předmět: matematika", "téma: Binomická věta"] }, { "value": "TV", "kind": 0, "comment": ["předmět: tělesná výchova", "téma: Gymnastika - prostná cvičení"] }, { "value": "TV", "kind": 0, "comment": ["předmět: tělesná výchova", "téma: Gymnastika - prostná cvičení"] }, { "value": "CJ", "kind": 0, "comment": ["předmět: český jazyk a literatura", "téma: Literatura po roce 1945"] }, { "value": "MA", "kind": 0, "comment": ["předmět: matematika", "téma: Pravděpodobnost jevů"] }, { "value": "HW", "kind": 0, "comment": ["předmět: hardware", "téma: LCD - úvod"] }, { "value": "AJ", "kind": 0, "comment": ["předmět: anglický jazyk", "téma: My hometown"] }] }, { "header": { "value": "08. 02. 2018", "id": 1518044400000 }, "items": { "2": { "value": "CJ", "kind": 0, "comment": ["předmět: český jazyk a literatura", "téma: Neorealismus"] }, "3": { "value": "TG", "kind": 0, "comment": ["předmět: technická grafika", "téma: Knihovny, přídavné moduly, využití"] }, "4": { "value": "TG", "kind": 0, "comment": ["předmět: technická grafika", "téma: Knihovny, přídavné moduly, využití"] }, "5": { "value": "WA", "kind": 0, "comment": ["předmět: webové aplikace", "téma: Javascript - objekty, funkce"] }, "6": { "value": "WA", "kind": 0, "comment": ["předmět: webové aplikace", "téma: Javascript - objekty, funkce"] }, "8": { "value": "OS", "kind": 0, "comment": ["předmět: operační systémy", "téma: aplikace pro správu sítě"] }, "9": { "value": "OS", "kind": 0, "comment": ["předmět: operační systémy", "téma: aplikace pro správu sítě"] }, "10": { "value": "OS", "kind": 0, "comment": ["předmět: operační systémy", "téma: aplikace pro správu sítě"] } } }, { "header": { "value": "09. 02. 2018", "id": 1518130800000 }, "items": [{ "value": "HW", "kind": 0, "comment": ["předmět: hardware", "téma: LCD - úvod, základní parametry"] }, { "value": "CJ", "kind": 0, "comment": ["předmět: český jazyk a literatura", "téma: Literatura po roce 1945"] }, { "value": "AJ", "kind": 0, "comment": ["předmět: anglický jazyk", "téma: Hometown"] }, { "value": "SV", "kind": 0, "comment": ["předmět: základy společenských věd", "téma: Filozofie renesance"] }] }], "current": 2, "total": 2
+    }
+}

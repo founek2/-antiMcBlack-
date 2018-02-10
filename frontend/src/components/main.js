@@ -7,7 +7,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import { styles } from '../styles/styles';
-
+import AbsenceTable from './absenceTable';
 class Logged extends Component {
 
     render() {
@@ -49,12 +49,11 @@ class Main extends Component {
                     titleStyle={styles.appBarTitle}
                     style={styles.appBar}
                 />
-            <div className='drawerContainer'>
                 <Drawer open={this.state.open} containerStyle={styles.drawerContainer}>
                     <MenuItem>Menu Item</MenuItem>
                     <MenuItem>Menu Item 2</MenuItem>
                 </Drawer>
-                </div>
+                <AbsenceTable />
             </div>
         );
     }

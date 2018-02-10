@@ -26,7 +26,8 @@ export const styles = {
         textAlign: 'center',
     },
     drawerContainer: {
-        position: 'relative',
+        position: 'absolute',
+        marginTop: '64px'
     },
     appBarTitle: {
 

@@ -1,18 +1,6 @@
-html {
-  height: 100%;
-}
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  height: inherit;
-}
-#root {
-  height: inherit;
-}
-.drawerContainer {
-  height: inherit;
-}
-.drawerContainer > div{
   height: inherit;
 }
