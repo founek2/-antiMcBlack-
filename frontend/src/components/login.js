@@ -26,7 +26,7 @@ class Login extends Component {
     render() {
         return (
             <div >
-                <Card style={styles.loginCard}>
+                <Card className='loginCard'>
                     <CardTitle title='McWhite' titleColor={pink500} />
                     <CardText >
                         <TextField

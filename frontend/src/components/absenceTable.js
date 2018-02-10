@@ -7,28 +7,31 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import json from '../apiResponses/absence';
-import { map, insert, head, keys } from 'ramda';
+import { map, insert, head, keys, merge, addIndex } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
+import { styles } from '../styles/styles';
+import mapIndexed from '../utils/mapIndex';
+import json from '../apiResponses/absence';
 
 const generateHeaderRow = (headerArray) => (
-  <TableRow key={Math.random()} >
-  {headerArray.map((item) => <TableHeaderColumn>{item}</TableHeaderColumn>, headerArray)}
+  <TableRow >
+  {mapIndexed((item, idx) => 
+    <TableHeaderColumn key={idx} style={styles.tableRowColumme}>{item}</TableHeaderColumn>, headerArray)}
   </TableRow >
 );
   
-const generateRows = (items) => map(generateCollumes, items);
+const generateRows = (items) => mapIndexed(generateCollumes, items);
 
-const generateCollumes = (items) => {
+const generateCollumes = (items, idx) => {
 
-  const collumes = map(generateCollume, itemsValue(items.items, 11))
-  const collumesWithFirst = insert(0, (<TableRowColumn key={Math.random()} >{items.header.value.substring(0,7)}</TableRowColumn>), collumes)
-  return (<TableRow key={Math.random()} >{collumesWithFirst}</TableRow>);
+  const collumes = mapIndexed(generateCollume, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
+  const collumesWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme}>{items.header.value.substring(0,7)}</TableRowColumn>), collumes)
+  return (<TableRow key={idx} >{collumesWithFirst}</TableRow>);
 }
 
-const generateCollume = (item) => (<TableRowColumn key={Math.random()} >{item.value}</TableRowColumn>);
+const generateCollume = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
 
-const absenceTable = ({ items }) => {
+const absenceTable = ({response}) => {
 
   return (
     <Table>

@@ -8,13 +8,13 @@ export const styles = {
         color: pink500,
     },
     floatingLabelFocusStyle: {
-        color: purple600,
+  //      color: purple600,
     },
     underlineStyle: {
         borderColor: pink500,
     },
     underlineFocusStyle: {
-        borderColor: purple600,
+ //       borderColor: purple600,
     },
     loginCard: {
         margin: 'auto',
@@ -34,5 +34,17 @@ export const styles = {
     },
     appBar: {
 
+    },
+    tableRowColumme: {
+        textAlign: 'center'
+    },
+    tableRowColummeKind1: { //nová absence
+        backgroundColor: pink500,
+    },
+    tableRowColummeKind2: { //omluvená absence
+        backgroundColor: purple600,
+    },
+    menuItemFocused: {
+        backgroundColor: 'rgba(0, 0, 0, 0.2)',
     }
 };

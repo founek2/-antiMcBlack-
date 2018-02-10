@@ -4,3 +4,31 @@ body {
   font-family: sans-serif;
   height: inherit;
 }
+.loginCard {
+  margin: auto;
+  width: 35%;
+  padding: 30px 10px 40px 10px;
+  text-align: center;
+}
+.defaultCard {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+}
+@media screen and (max-width: 880px) {
+  .loginCard {
+    margin: auto;
+    width: 60%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .loginCard {
+    margin: auto;
+    width: 80%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
+}
