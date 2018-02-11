@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Login from "./components/login";
-import Main from "./components/main";
-import Grades from "./components/gradesTable";
+import  Login from "./components/login";
+import  Main from "./components/main";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'typeface-roboto'
+import { logIn } from './api';
+import {path} from 'ramda';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      logged: false,
+    }
+  }
+  handleLogin = async (userName, passwd) => {
+    const result = await logIn(userName, passwd);
+    console.log(result)
+    path(['status'], result) === 'success' ? this.setState({logged: true}) : this.setState({logged: false});
+  }
+
+  _renderContent = () => 
+    this.state.logged ? <Main /> : <Login handleLogin={this.handleLogin} />;
+  
   render() {
+
     return (
       <MuiThemeProvider>
-        <BrowserRouter>
-          <Switch>
-            <Route path='/' exact component={Login} />
-            <Route path='/main' component={Main} />
-            <Route path='/:grades' component={Grades} />
-          </Switch>
-        </BrowserRouter>
+        {this._renderContent()}
       </MuiThemeProvider>
     );
   }

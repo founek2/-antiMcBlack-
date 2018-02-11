@@ -74,7 +74,10 @@ class Login extends Component {
                         />
                     </CardText>
                     <CardActions style={styles.loginCardActions}>
-                        <RaisedButton label="Login"  />
+                        <RaisedButton 
+                            label="Login" 
+                            onClick={() => this.props.handleLogin(path(['inputs','username'],this.state), path(['inputs','password'],this.state))}
+                         />
                     </CardActions>
                 </Card>
             </div >
