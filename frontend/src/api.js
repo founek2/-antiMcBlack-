@@ -7,5 +7,6 @@ export const logIn = async (userName, password) => {
         'Content-Type': 'application/json',
     }});
   //  return await response.ok ? result.json() : toogleError()
-    return await response.json();
+    const data = await response.json();
+    return await data.response;
 }

@@ -16,7 +16,7 @@ class App extends Component {
   handleLogin = async (userName, passwd) => {
     const result = await logIn(userName, passwd);
     console.log(result)
-    path(['status'], result) === 'success' ? this.setState({logged: true}) : this.setState({logged: false});
+    path(['login'], result) === 'success' ? this.setState({logged: true}) : this.setState({logged: false});
   }
 
   _renderContent = () => 
