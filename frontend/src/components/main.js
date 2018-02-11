@@ -21,25 +21,22 @@ const menuComponents = {
     files: 'Soubory (in far future)'
 };
 
-class Logged extends Component {
+const Logged = (props) => {
 
-    render() {
-        const props = this.props;
         return (<div>
             <IconMenu
-                {...props}
                 iconButtonElement={
                     <IconButton><MoreVertIcon /></IconButton>
                 }
                 targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                onItemClick={props.handleItemClick}
             >
-                <MenuItem primaryText="Help" />
-                <MenuItem primaryText="Sign out" />
+                <MenuItem primaryText="Help" value='help'/>
+                <MenuItem primaryText="Sign out" value='logOut'/>
             </IconMenu>
         </div>)
-    }
-};
+    };
 
 Logged.muiName = 'IconMenu';
 
@@ -66,13 +63,16 @@ class Main extends Component {
         const menuItemsStyles = { [menuItem.props.value]: styles.menuItemFocused }
         this.setState({ menuItemsStyles });
     }
+    _handleRightMenuItemClick = (e, item) => {
+            if (item.props.value === 'logOut') this.props.handleLogOut();
+    }
     render() {
         return (
             <div style={{ height: 'inherit' }}>
                 <ClickOutside onClickOutside={this._handleESC}>
                     <AppBar
                         title={"Intranet"}
-                        iconElementRight={<Logged />}
+                        iconElementRight={<Logged handleItemClick={this._handleRightMenuItemClick}/>}
                         onLeftIconButtonClick={this._handleToggleDrawer}
                         titleStyle={styles.appBarTitle}
                         style={styles.appBar}

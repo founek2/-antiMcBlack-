@@ -25,6 +25,9 @@ export const styles = {
     loginCardActions: {
         textAlign: 'center',
     },
+    absenceCard: {
+        padding: '20px'
+    },
     drawerContainer: {
         position: 'absolute',
         marginTop: '64px'
@@ -46,5 +49,10 @@ export const styles = {
     },
     menuItemFocused: {
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    },
+    radioButton: {
+        width: 'inherit',
+        float: 'left',
+        marginRight: '20px'
     }
 };

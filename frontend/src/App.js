@@ -33,19 +33,28 @@ class App extends Component {
     this.setState({absenceResponse: deepmerge( absenceResp, absenceResp2)})
 
   }
-  handleLogin = async (userName, passwd) => {
+  _handleLogin = async (userName, passwd) => {
     const result = await logIn(userName, passwd);
     console.log(result)
     if (path(['login'], result) === 'success') {
       this.setState({ logged: true, cid: path(['cid'], result) });
       sessionStorage.setItem('cid', path(['cid'], result));
+      this._lazyLoadContent();
     } else {
       this.setState({ logged: false });
     }
   }
-
+  _handleLogOut = () => {
+    this.setState({
+      logged: false,
+      cid: undefined,
+    })
+    sessionStorage.removeItem('cid')
+  }
   _renderContent = () =>
-    this.state.logged ? <Main absenceResponse={this.state.absenceResponse}/> : <Login handleLogin={this.handleLogin} />;
+    this.state.logged ? 
+      <Main absenceResponse={this.state.absenceResponse} handleLogOut={this._handleLogOut}/> :
+       <Login handleLogin={this._handleLogin} />;
 
   render() {
 
