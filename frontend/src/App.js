@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./components/login";
 import Main from "./components/main";
-import Grades from "./components/grades";
+import Grades from "./components/gradesTable";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'typeface-roboto'
 
