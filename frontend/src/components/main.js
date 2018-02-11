@@ -11,13 +11,12 @@ import { styles } from '../styles/styles';
 import AbsenceTable from './absenceTable';
 import GradesTable from './gradesTable';
 import json from '../apiResponses/absence';
-import { assoc } from 'ramda';
 import ClickOutside from 'react-click-outside';
 import Default from './default';
 
 const menuComponents = {
-    default: <Default />,
-    absence: <AbsenceTable response={json.response} />,
+    default: () => <Default />,
+    absence: (response) => <AbsenceTable response={response} />,
     classification:<GradesTable />,
     files: 'Soubory (in far future)'
 };
@@ -35,7 +34,6 @@ class Logged extends Component {
                 targetOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             >
-                <MenuItem primaryText="Refresh" />
                 <MenuItem primaryText="Help" />
                 <MenuItem primaryText="Sign out" />
             </IconMenu>
@@ -90,7 +88,7 @@ class Main extends Component {
                         </Menu>
                     </Drawer>
                 </ClickOutside>
-                {menuComponents[this.state.activeComponent]}
+                {menuComponents[this.state.activeComponent](this.props.absenceResponse)}
             </div>
         );
     }

@@ -32,7 +32,7 @@ const generateCollumes = (items, idx) => {
 const generateCollume = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
 
 const absenceTable = ({response}) => {
-
+  console.log(response)
   return (
     <Table>
       <TableHeader
@@ -44,7 +44,7 @@ const absenceTable = ({response}) => {
       <TableBody
         displayRowCheckbox={false}
       >
-        {generateRows(json.response.items)}
+        {generateRows(response.items)}
       </TableBody>
     </Table>
   )
