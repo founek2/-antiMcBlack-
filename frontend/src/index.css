@@ -1,18 +1,34 @@
-html {
-  height: 100%;
-}
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   height: inherit;
 }
-#root {
-  height: inherit;
+.loginCard {
+  margin: auto;
+  width: 35%;
+  padding: 30px 10px 40px 10px;
+  text-align: center;
 }
-.drawerContainer {
-  height: inherit;
+.defaultCard {
+  width: 70%;
+  margin: auto;
+  text-align: center;
 }
-.drawerContainer > div{
-  height: inherit;
+@media screen and (max-width: 880px) {
+  .loginCard {
+    margin: auto;
+    width: 60%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .loginCard {
+    margin: auto;
+    width: 80%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
 }
