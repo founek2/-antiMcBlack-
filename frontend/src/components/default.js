@@ -15,6 +15,9 @@ class Login extends Component {
                 <Card className='defaultCard'>
                     <CardTitle title='McWhite' titleColor={pink500} />
                     <CardText >
+                        <p>Tento projekt je vytvářen dvěma studenty ve volném čase jako lepší alternative k Intranetu SPŠE
+                             s využitím nových technologií. Frontend je napsaný v knihovně React s
+                              využitím <a href='http://www.material-ui.com'>material-ui</a> komponent.</p>
                     </CardText>
                 </Card>
             </div >
