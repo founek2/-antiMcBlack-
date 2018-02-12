@@ -18,8 +18,8 @@ import deepmerge from 'deepmerge';
 
 const menuComponents = {
     default: () => <Default />,
-    absence: (props) => <AbsenceTable {...props.absence} cid={props.cid} />,
-    classification: (props) => <GradesTable response={props.classificationResponse} />,
+    absence: (props) => <AbsenceTable {...props.absence}/>,
+    classification: (props) => <GradesTable {...props.classification} />,
     files: 'Soubory (in far future)'
 };
 
@@ -55,6 +55,9 @@ class Main extends Component {
                 totalWeek: 0,
                 items: [],
                 period: 2,
+            },
+            classificationState: {
+                period: 2,
             }
         };
         this._lazyLoadContent();
@@ -63,12 +66,16 @@ class Main extends Component {
         await rightsAbsence(this.props.cid);
         this._loadDefAbsence()
         await rightsClassification(this.props.cid);
-
-        const classificationResp = await getClassification(this.props.cid, 2);
-         this.setState({
-            classificationResponse: classificationResp
+        this._loadClassification();
+    }
+    _loadClassification = async () => {
+        const classificationResp = await getClassification(this.props.cid, this.state.classificationState.period);
+        const newClassificationState = this.state.classificationState;
+        newClassificationState.response = classificationResp;
+        
+        this.setState({
+            classificationState: newClassificationState,
         })
-
     }
     _loadDefAbsence = async () => {
         console.log('absencePeriod ' + this.state.absenceState.period)
@@ -132,6 +139,12 @@ class Main extends Component {
         this.setState({ absenceState: newAbsenceState });
         this._loadDefAbsence();
     }
+    _handleChangePeriodClassification = (e, isChecked) => {
+        const newClassificationState = this.state.classificationState;
+        newClassificationState.period = isChecked ? 2 : 1;
+        this.setState({ classificationState: newClassificationState });
+        this._loadClassification();
+    }
     render() {
         return (
             <div style={{ height: 'inherit' }}>
@@ -160,9 +173,11 @@ class Main extends Component {
                         handleNumberOfRecords: this._handleNumberOfAbsenceRecords,
                         handlePeriodChange: this._handleChangePeriodAbsence,
                     },
-                    
-                    classificationResponse: this.props.classificationResponse,
-                    cid: this.props.cid,
+                    classification: {
+                        response: this.state.classificationState.response,
+                        period: this.state.classificationState.period,
+                        handlePeriodChange: this._handleChangePeriodClassification,
+                    },
                 })}
             </div>
         );

@@ -15,6 +15,7 @@ class Default extends Component {
                         <p>Tento projekt je vytvářen dvěma studenty ve volném čase jako lepší alternative k Intranetu SPŠE
                              s využitím nových technologií. Frontend je napsaný v knihovně React s
                               využitím <a href='http://www.material-ui.com'>material-ui</a> komponent.</p>
+                        <p>Nikdy nejsou ukládána uživatelská data na backendu. Requesty z frontendu se pouze přeposílají na api.spse.cz.</p>
                     </CardText>
                 </Card>
             </div >

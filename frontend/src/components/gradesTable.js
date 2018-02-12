@@ -10,6 +10,8 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table';
+import Toggle from 'material-ui/Toggle';
+import { styles } from '../styles/styles';
 
 const indexedMap = addIndex(map);
 const generateGrades = (row, maxValue) => {
@@ -112,6 +114,18 @@ class Grades extends Component {
         console.log(this.props.response)
         return (
             <div>
+                <div style={{display: 'flex'}}>
+                    <Toggle
+                        label="Pololetí 1."
+                        style={styles.toggle}
+                        trackSwitchedStyle={styles.trackSwitched}
+                        thumbSwitchedStyle={styles.thumbSwitched}
+                        style={styles.periodSwitch}
+                        toggled={this.props.period === 2 ? true : false}
+                        onToggle={this.props.handlePeriodChange}
+                    />
+                    <span>2.</span>
+                </div>
                 <Table selectable={false} >
                     <TableHeader displaySelectAll={false}
                         adjustForCheckbox={false}>

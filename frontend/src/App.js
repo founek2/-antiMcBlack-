@@ -31,7 +31,6 @@ class App extends Component {
     if (path(['login'], result) === 'success') {
       this.setState({ logged: true, cid: path(['cid'], result) });
       sessionStorage.setItem('cid', path(['cid'], result));
-      this._lazyLoadContent();
     } else {
       this.setState({ logged: false });
     }
