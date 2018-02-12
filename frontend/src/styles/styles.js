@@ -1,4 +1,4 @@
-import { red900, purple600, pink500 } from 'material-ui/styles/colors';
+import { red900, purple600, pink500, pink300, pink100 } from 'material-ui/styles/colors';
 
 export const styles = {
     errorStyle: {
@@ -8,13 +8,13 @@ export const styles = {
         color: pink500,
     },
     floatingLabelFocusStyle: {
-  //      color: purple600,
+        //      color: purple600,
     },
     underlineStyle: {
         borderColor: pink500,
     },
     underlineFocusStyle: {
- //       borderColor: purple600,
+        //       borderColor: purple600,
     },
     loginCard: {
         margin: 'auto',
@@ -36,7 +36,7 @@ export const styles = {
 
     },
     appBar: {
-        backgroundColor:pink500,
+        backgroundColor: pink500,
     },
     tableRowColumme: {
         textAlign: 'center'
@@ -51,8 +51,25 @@ export const styles = {
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
     },
     radioButton: {
-        width: 'inherit',
+        width: '12%',
         float: 'left',
-        marginRight: '20px'
-    }
+        marginRight: '4%',
+
+    },
+    trackSwitched: {
+        backgroundColor: pink100,
+    },
+    thumbSwitched: {
+        backgroundColor: pink300,
+    },
+    periodSwitch: {
+        width: '120px',
+        float: 'left',
+        paddingRight: '13px',
+        display: 'block',
+    },
+    absenceTop: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
 };

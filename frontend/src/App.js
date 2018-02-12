@@ -3,7 +3,7 @@ import Login from "./components/login";
 import Main from "./components/main";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'typeface-roboto'
-import { logIn, getAbsence, rightsAbsence } from './api';
+import { logIn, getAbsence, rightsAbsence, rightsClassification, getClassification } from './api';
 import { path, mergeDeepWith, concat } from 'ramda';
 import deepmerge from 'deepmerge';
 
@@ -17,7 +17,6 @@ class App extends Component {
         logged: true,
         cid: cid,
       }
-      this._lazyLoadContent()
     } else {
       this.state = {
         logged: false,
@@ -25,14 +24,7 @@ class App extends Component {
     }
   }
 
-  _lazyLoadContent = async () => {
-    await rightsAbsence(this.state.cid);
-    const absenceResp = await getAbsence(this.state.cid, 2, 1);
-    const absenceResp2 = await getAbsence(this.state.cid, 2, 2);
-
-    this.setState({absenceResponse: deepmerge( absenceResp, absenceResp2)})
-
-  }
+  
   _handleLogin = async (userName, passwd) => {
     const result = await logIn(userName, passwd);
     console.log(result)
@@ -53,7 +45,12 @@ class App extends Component {
   }
   _renderContent = () =>
     this.state.logged ? 
-      <Main absenceResponse={this.state.absenceResponse} handleLogOut={this._handleLogOut}/> :
+      <Main
+         absenceResponse={this.state.absenceResponse} 
+         classificationResponse={this.state.classificationResponse}
+        handleLogOut={this._handleLogOut}
+        cid={this.state.cid}
+      /> :
        <Login handleLogin={this._handleLogin} />;
 
   render() {

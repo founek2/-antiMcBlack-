@@ -3,7 +3,7 @@ import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { pink500 } from 'material-ui/styles/colors';
 
-class Login extends Component {
+class Default extends Component {
 
 
     render() {
@@ -22,4 +22,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default Default;

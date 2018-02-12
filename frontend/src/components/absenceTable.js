@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Table,
   TableBody,
@@ -13,6 +13,9 @@ import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
+import { getAbsence } from '../api'
+import deepmerge from 'deepmerge';
+import Toggle from 'material-ui/Toggle';
 
 const sortByNameCaseInsensitive = sortBy(compose(prop('header'), prop('value'))); //who knows if that works
 
@@ -23,7 +26,7 @@ const generateHeaderRow = (headerArray) => (
   </TableRow >
 );
 
-const generateRows = (items, numberOfRecords) => mapIndexed(generateCollumes, slice(0, numberOfRecords, sortByNameCaseInsensitive(reverse(items))));
+const generateRows = (items, numberOfRecords) => mapIndexed(generateCollumes, slice(0, numberOfRecords, reverse(items)));
 
 const generateCollumes = (items, idx) => {
 
@@ -34,21 +37,22 @@ const generateCollumes = (items, idx) => {
 
 const generateCollume = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
 
-class AbsenceTable extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      numberOfRecords: 10,
-    }
-  }
-  _handleNumberOfRecords = (e, value) => {
-    if (value > this.state.numberOfRecords) //zavolat api pro více dat
-    this.setState({numberOfRecords: value})
-  }
- render (){ 
-    return (
-    <Card style={styles.absenceCard}>
-      <RadioButtonGroup name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={this._handleNumberOfRecords}>
+const AbsenceTable = (props) => (
+  <Card style={styles.absenceCard}>
+    <div style={styles.absenceTop}>
+      <div style={styles.absencePeriodSwitchContainer}>
+        <Toggle
+          label="Pololetí 1."
+          style={styles.toggle}
+          trackSwitchedStyle={styles.trackSwitched}
+          thumbSwitchedStyle={styles.thumbSwitched}
+          style={styles.periodSwitch}
+          toggled={props.absenceState.period === 2 ? true : false}
+          onToggle={props.handlePeriodChange}
+        />
+        <span>2.</span>
+      </div>
+      <RadioButtonGroup style={{width: '300px'}} name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={props.handleNumberOfRecords}>
         <RadioButton
           value="5"
           label="5"
@@ -67,24 +71,26 @@ class AbsenceTable extends Component {
         <RadioButton
           value="50"
           label="50"
-          style={{...styles.radioButton, float: 'none'}}
+          style={{ ...styles.radioButton, float: 'none' }}
         />
       </RadioButtonGroup>
-      <Table>
-        <TableHeader
-          displaySelectAll={false}
-          adjustForCheckbox={false}
-        >
-          {generateHeaderRow(['Datum', '0.', '1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '10.'])}
-        </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-        >
-          {generateRows(this.props.response.items, this.state.numberOfRecords)}
-        </TableBody>
-      </Table>
-    </Card>
-  )}
-}
+    </div>
+    <Table>
+      <TableHeader
+        displaySelectAll={false}
+        adjustForCheckbox={false}
+      >
+        {generateHeaderRow(['Datum', '0.', '1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '10.'])}
+      </TableHeader>
+      <TableBody
+        displayRowCheckbox={false}
+      >
+        {generateRows(props.absenceState.items, props.absenceState.numberOfRecords)}
+      </TableBody>
+    </Table>
+  </Card>
+)
+
+
 
 export default AbsenceTable;

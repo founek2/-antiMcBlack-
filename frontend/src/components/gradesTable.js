@@ -82,10 +82,10 @@ const generateRowMobile = (row, maxValue, key) => {
     )
 }
 const renderResponse = (response, generate) => {
-    const items = path(['response', 'items'], response)
+    const items = path(['items'], response)
     const counts = map((item) => length(item.items), items)
     const maxValue = reduce(max, -Infinity, counts)
-    return indexedMap((row, key) => generate(row, maxValue, key), path(['response', 'items'], response));
+    return indexedMap((row, key) => generate(row, maxValue, key), path(['items'], response));
 }
 
 class Grades extends Component {
@@ -109,6 +109,7 @@ class Grades extends Component {
     };
 
     _renderForDesktop = () => {
+        console.log(this.props.response)
         return (
             <div>
                 <Table selectable={false} >
@@ -116,7 +117,7 @@ class Grades extends Component {
                         adjustForCheckbox={false}>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
-                        {renderResponse(response, generateRow)}
+                        {renderResponse(this.props.response, generateRow)}
                     </TableBody>
                 </Table>
             </div>
@@ -125,7 +126,7 @@ class Grades extends Component {
     _renderForMobile = () => {
         return (
             <div>
-                {renderResponse(response, generateRowMobile)}
+                {renderResponse(this.props.response, generateRowMobile)}
             </div>
         )
     }
