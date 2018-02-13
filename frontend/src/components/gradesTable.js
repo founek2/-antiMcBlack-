@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { map, path, length, max, reduce, append, repeat, unnest, prop, addIndex, takeLast, lt } from 'ramda';
+import { map, path, length, max, reduce, append, repeat, unnest, prop, addIndex, takeLast, lt, splitEvery } from 'ramda';
 import response from "../apiResponses/gradesResponse";
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import {
@@ -11,36 +11,46 @@ import {
     TableRowColumn,
 } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
-import { styles } from '../styles/styles';
+import {styles} from '../styles/styles'
 
 const indexedMap = addIndex(map);
-const generateGrades = (row, maxValue) => {
-    const makeRow = (item, index) => <TableRowColumn key={index} className='gradesTableRow gradesColumn'>{getValue(item)}</TableRowColumn>;
-    return indexedMap(makeRow, insertBlank(prop('items', row), maxValue))
+const generateGrades = (row) => {
+    const makeColumn = (item, index) => {
+        return (
+            <TableRowColumn key={index} className='gradesTableRow gradesColumn'>
+                {getValue(item)}
+            </TableRowColumn>)
+    }
+    const makeRow = (item, index) => (
+        <TableRow key={index}>
+            {indexedMap(makeColumn, item)}
+        </TableRow>)
+    return indexedMap(makeRow, splitEvery(5, insertBlank(prop('items', row))))
 }
 const getValue = prop('value');
-const insertBlank = (items, max) => unnest(append(repeat({ value: '' }, max - length(items)), items));
+const colSpanGradesHeader=() => lt(window.innerWidth,680)?2:5
+const insertBlank = (items) =>lt(length(items),colSpanGradesHeader())?unnest(append(repeat({ value: '' }, colSpanGradesHeader() - length(items)), items)):items;
 const generateNameColumn = (name) => lt(window.innerWidth, 680) ? takeLast(4, name) : name;
-const generateRow = (row, maxValue, key) => {
+const generateRow = (row, key) => {
     return (
         <TableRow key={key} style={{ 'height': '30px' }}>
             <TableRowColumn className='gradesTableRow subjectNameColumn' >{generateNameColumn(getValue(prop('header', row)))}</TableRowColumn>
-            {generateGrades(row, maxValue)}
-            <TableRowColumn className='gradesTableRow ' style={{ width: '1em', 'height': '30px' }}>{getValue(prop('total', row))}</TableRowColumn>
-            <TableRowColumn className='gradesTableRow ' style={{ width: '4em', 'height': '30px' }}>{getValue(prop('absence', row))}</TableRowColumn>
+            {generateGrades(row)}
+            <TableRowColumn className='gradesTableRow  averageColumn'>{getValue(prop('total', row))}</TableRowColumn>
+            <TableRowColumn className='gradesTableRow  absenceColumn'>{getValue(prop('absence', row))}</TableRowColumn>
         </TableRow>
     )
 }
-const generateHeaderRowDestop = (width) => {
+const generateHeaderRowDesktop = (width) => {
     return (
         <TableHeader displaySelectAll={false}
             adjustForCheckbox={false}
             enableSelectAll={false}>
             <TableRow>
-                <TableHeaderColumn tooltip="Název předmětu">Název předmětu</TableHeaderColumn>
-                <TableHeaderColumn colSpan={width} tooltip="Známky">Známky</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Výsledná známka">Výsledná známka</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Absence">Absence</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Název předmětu" >Název předmětu</TableHeaderColumn>
+                <TableHeaderColumn colSpan={colSpanGradesHeader()} style={styles.gradesColumnHeader} tooltip="Známky"  className='gradesColumnHeader'>Známky</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Výsledná známka" style={styles.averageColumnHeader}>Výsledná známka</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Absence" style={styles.absenceColumnHeader}>Absence</TableHeaderColumn>
             </TableRow>
         </TableHeader>
     )
@@ -51,8 +61,8 @@ const generateHeaderRowMobile = (width) => {
             adjustForCheckbox={false}
             enableSelectAll={false}>
             <TableRow>
-                <TableHeaderColumn colSpan={width.toString()} tooltip="Známky">Známky</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Výsledná známka">Výsledná známka</TableHeaderColumn>
+                <TableHeaderColumn  tooltip="Známky">Známky</TableHeaderColumn>
+                <TableHeaderColumn tooltip="Výsledná známka" className='averageColumnHeader'>Výsledná známka</TableHeaderColumn>
                 <TableHeaderColumn tooltip="Absence">Absence</TableHeaderColumn>
             </TableRow>
         </TableHeader>
@@ -73,8 +83,8 @@ const generateRowMobile = (row, maxValue, key) => {
                     </TableHeader>
                     <TableBody displayRowCheckbox={false}>
                         <TableRow>
-                            {generateGrades(row, maxValue)}
-                            <TableRowColumn >{getValue(prop('total', row))}</TableRowColumn>
+                            {generateGrades(row)}
+                            <TableRowColumn className='gradesTableRow  averageColumn'>{getValue(prop('total', row))}</TableRowColumn>
                             <TableRowColumn >{getValue(prop('absence', row))}</TableRowColumn>
                         </TableRow>
                     </TableBody>
@@ -84,10 +94,7 @@ const generateRowMobile = (row, maxValue, key) => {
     )
 }
 const renderResponse = (response, generate) => {
-    const items = path(['items'], response)
-    const counts = map((item) => length(item.items), items)
-    const maxValue = reduce(max, -Infinity, counts)
-    return indexedMap((row, key) => generate(row, maxValue, key), path(['items'], response));
+    return response?indexedMap((row, key) => generate(row, key), prop('items', response)):null;
 }
 
 class Grades extends Component {
@@ -110,8 +117,32 @@ class Grades extends Component {
         this.setState({ width: window.innerWidth });
     };
 
-    _renderForDesktop = () => {
-        console.log(this.props.response)
+    _renderForDesktop = (response) => {
+       return (
+            <div>
+                <Table selectable={false} >
+                    <TableHeader displaySelectAll={false}
+                        adjustForCheckbox={false}>
+                    </TableHeader>
+                    {generateHeaderRowDesktop(5)}
+                    <TableBody displayRowCheckbox={false}>
+                        {renderResponse(response, generateRow)}
+                    </TableBody>
+                </Table>
+            </div>
+        )
+    }
+    _renderForMobile = (response) => {
+        return (
+            <div>
+                {renderResponse(response, generateRowMobile)}
+            </div>
+        )
+    }
+    render() {
+        const { width } = this.state;
+        const isMobile = width <= 540;
+        const render = isMobile ? this._renderForMobile : this._renderForDesktop
         return (
             <div>
                 <div style={{display: 'flex'}}>
@@ -126,31 +157,7 @@ class Grades extends Component {
                     />
                     <span>2.</span>
                 </div>
-                <Table selectable={false} >
-                    <TableHeader displaySelectAll={false}
-                        adjustForCheckbox={false}>
-                    </TableHeader>
-                    <TableBody displayRowCheckbox={false}>
-                        {renderResponse(this.props.response, generateRow)}
-                    </TableBody>
-                </Table>
-            </div>
-        )
-    }
-    _renderForMobile = () => {
-        return (
-            <div>
-                {renderResponse(this.props.response, generateRowMobile)}
-            </div>
-        )
-    }
-    render() {
-        const { width } = this.state;
-        const isMobile = width <= 540;
-        const render = isMobile ? this._renderForMobile : this._renderForDesktop
-        return (
-            <div>
-                {render()}
+                {render(this.props.response)}
             </div>
         );
     }
