@@ -9,9 +9,11 @@ export default {
           totalWeek: 0,
           items: [],
           period: 2,
+          fetchingData: false,
       },
       classificationState: {
           period: 2,
+          fetchingData: false,
       },
       inputs: {
           passwordNew: {

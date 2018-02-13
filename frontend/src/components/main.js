@@ -65,16 +65,28 @@ class Main extends Component {
         await rightsClassification(this.props.cid);
         this._loadClassification();
     }
+    _handleFetchingData = (path, value) =>{
+        console.log(path, value)
+        this.setState({
+           [path]: assocPath([ 'fetchingData'],value, this.state[path]),
+        })
+    } 
+
     _loadClassification = async () => {
+        
+        this._handleFetchingData('absenceState', true)
+        
         const classificationResp = await getClassification(this.props.cid, this.state.classificationState.period);
         const newClassificationState = this.state.classificationState;
         newClassificationState.response = classificationResp;
 
+        this._handleFetchingData('absenceState', false)
         this.setState({
             classificationState: newClassificationState,
         })
     }
     _loadDefAbsence = async () => {
+        this._handleFetchingData('absenceState', true)
         console.log('absencePeriod ' + this.state.absenceState.period)
         const absenceResp = await getAbsence(this.props.cid, this.state.absenceState.period, 0);
         const numberOfWeekBefore = absenceResp.total - 1;
@@ -88,8 +100,11 @@ class Main extends Component {
         this.setState({
             absenceState: newAbsenceState2,
         })
+        this._handleFetchingData('absenceState', false)
     }
     _handleNumberOfAbsenceRecords = async (e, value) => {
+        this._handleFetchingData('absenceState', true)
+
         let itemsNew = this.state.absenceState.items;
         let newCurrentWeek = this.state.absenceState.currentWeek;
         const {
@@ -113,6 +128,7 @@ class Main extends Component {
         newAbsenceState.numberOfRecords = value;
         newAbsenceState.currentWeek = newCurrentWeek;
         this.setState({ absenceState: newAbsenceState })
+        this._handleFetchingData('absenceState', false)
     }
     handleClickOutside() {
         this._handleESC();

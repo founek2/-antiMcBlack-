@@ -16,6 +16,7 @@ import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import { getAbsence } from '../api'
 import deepmerge from 'deepmerge';
 import Toggle from 'material-ui/Toggle';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const generateHeaderRow = (headerArray) => (
   <TableRow >
@@ -49,6 +50,7 @@ const AbsenceTable = (props) => (
           onToggle={props.handlePeriodChange}
         />
         <span>2.</span>
+        <CircularProgress size={25} thickness={3} style={!props.absenceState.fetchingData ? {display: 'none'} : {}}/>
       </div>
       <RadioButtonGroup style={{width: '300px'}} name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={props.handleNumberOfRecords}>
         <RadioButton
