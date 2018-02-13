@@ -78,5 +78,22 @@ export const styles = {
     timeTableIframe: {
         width: '100%',
         height: '100%'
-    }
+    },
+    gradesColumnHeader: {
+        paddingLeft: '40%',
+    },
+    averageColumnHeader: {
+        paddingRight: '8px',
+    },
+    absenceColumnHeader: {
+        paddingRight: '0px'
+    },
+    mobile: {
+        averageColumnHeader: {
+            paddingLeft: '80px',
+        }
+    },
+    absenceTableHeaderRow:{
+        width: '99%'
+    },
 };

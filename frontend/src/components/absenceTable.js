@@ -7,7 +7,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice, compose, prop } from 'ramda';
+import { insert, merge, reverse, slice, compose, prop, lt } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
@@ -16,11 +16,12 @@ import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import { getAbsence } from '../api'
 import deepmerge from 'deepmerge';
 import Toggle from 'material-ui/Toggle';
+const mobileView = () => lt(window.innerWidth, 580)
 
 const generateHeaderRow = (headerArray) => (
   <TableRow >
     {mapIndexed((item, idx) =>
-      <TableHeaderColumn key={idx} style={styles.tableRowColumme}>{item}</TableHeaderColumn>, headerArray)}
+      <TableHeaderColumn key={idx} style={styles.tableRowColumme} className={idx===0?'tableHeaderColumnFirst':null}>{item}</TableHeaderColumn>, headerArray)}
   </TableRow >
 );
 
@@ -29,14 +30,14 @@ const generateRows = (items, numberOfRecords) => mapIndexed(generateColumns, sli
 const generateColumns = (items, idx) => {
 
   const columns = mapIndexed(generateColumn, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
-  const columnsWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme}>{items.header.value.substring(0, 7)}</TableRowColumn>), columns)
+  const columnsWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme} className='tableDateColumn'>{items.header.value.substring(0, 7)}</TableRowColumn>), columns)
   return (<TableRow key={idx} >{columnsWithFirst}</TableRow>);
 }
 
-const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
+const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)} className='tableRowColumn'>{item.value}</TableRowColumn>);
 
 const AbsenceTable = (props) => (
-  <Card style={styles.absenceCard}>
+  <Card >
     <div style={styles.absenceTop}>
       <div style={styles.absencePeriodSwitchContainer}>
         <Toggle
@@ -50,7 +51,7 @@ const AbsenceTable = (props) => (
         />
         <span>2.</span>
       </div>
-      <RadioButtonGroup style={{width: '300px'}} name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={props.handleNumberOfRecords}>
+      <RadioButtonGroup style={{ width: '300px' }} name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={props.handleNumberOfRecords}>
         <RadioButton
           value="5"
           label="5"
@@ -73,7 +74,7 @@ const AbsenceTable = (props) => (
         />
       </RadioButtonGroup>
     </div>
-    <Table>
+    <Table style={styles.absenceTableHeaderRow}>
       <TableHeader
         displaySelectAll={false}
         adjustForCheckbox={false}
