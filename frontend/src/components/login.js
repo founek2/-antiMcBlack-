@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { styles } from '../styles/styles'
 import { pink500 } from 'material-ui/styles/colors';
 import { path, assocPath, prop } from 'ramda';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const getNameFromEvent = path(['target', 'name'])
 const getValueFromEvent = path(['target', 'value'])
@@ -18,7 +19,7 @@ class Login extends Component {
             inputs: {
                 password: {value: '', valid: true, errorMessage: 'Password musí mít min. délku 5 znaků'},
                 username: {value: '', valid: true, errorMessage: 'Username musí mít min. délku 3 znaky'}
-            }
+            },
         }
     }
 
@@ -84,6 +85,7 @@ class Login extends Component {
                         <RaisedButton 
                             label="Login" 
                             onClick={this._handleLogin}
+                            icon={<CircularProgress size={25} thickness={3} style={!this.props.logInProggres ? {display: 'none'} : {}}/>}
                          />
                     </CardActions>
                 </Card>

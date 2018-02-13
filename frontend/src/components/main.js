@@ -19,6 +19,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import TimeTable from './timeTable';
+import mainDefaultState from '../constants/mainDefaultState';
 
 const getNameFromEvent = path(['target', 'name'])
 const getValueFromEvent = path(['target', 'value'])
@@ -55,43 +56,7 @@ Logged.muiName = 'IconMenu';
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            open: false,
-            activeComponent: 'default',
-            menuItemsStyles: {},
-            openDialogPassword: false,
-            absenceState: {
-                numberOfRecords: 10,
-                currentWeek: 0,
-                totalWeek: 0,
-                items: [],
-                period: 2,
-            },
-            classificationState: {
-                period: 2,
-            },
-            inputs: {
-                passwordNew: {
-                    value: '',
-                    valid: true,
-                    errorMessage: 'Password musí mít min. délku 5 znaků',
-                },
-                passwordNewAgain: {
-                    value: '',
-                    valid: true,
-                    errorMessage: 'Hesla se neshodují',
-                },
-                passwordOld: {
-                    value: '',
-                    valid: true,
-                    errorMessage: 'Password musí mít min. délku 5 znaků',
-                },
-                dialog: {
-                    valid: true,
-                    errorMessage: 'Zadané heslo není správné'
-                }
-            }
-        };
+        this.state = mainDefaultState;
         this._lazyLoadContent();
     }
     _lazyLoadContent = async () => {
@@ -221,7 +186,6 @@ class Main extends Component {
     _handleOnChange = (e) => {
         e.persist();
         this.setState(setInput(getNameFromEvent(e), getValueFromEvent(e)));
-        console.log(this[getNameFromEvent(e)])
         setTimeout(() => {
             this[getNameFromEvent(e)].focus();
         }, 10);

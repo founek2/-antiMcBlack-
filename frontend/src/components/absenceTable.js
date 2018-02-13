@@ -7,7 +7,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice, sortBy, compose, prop } from 'ramda';
+import { insert, merge, reverse, slice, compose, prop } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
@@ -17,8 +17,6 @@ import { getAbsence } from '../api'
 import deepmerge from 'deepmerge';
 import Toggle from 'material-ui/Toggle';
 
-const sortByNameCaseInsensitive = sortBy(compose(prop('header'), prop('value'))); //who knows if that works
-
 const generateHeaderRow = (headerArray) => (
   <TableRow >
     {mapIndexed((item, idx) =>
@@ -26,16 +24,16 @@ const generateHeaderRow = (headerArray) => (
   </TableRow >
 );
 
-const generateRows = (items, numberOfRecords) => mapIndexed(generateCollumes, slice(0, numberOfRecords, reverse(items)));
+const generateRows = (items, numberOfRecords) => mapIndexed(generateColumns, slice(0, numberOfRecords, reverse(items)));
 
-const generateCollumes = (items, idx) => {
+const generateColumns = (items, idx) => {
 
-  const collumes = mapIndexed(generateCollume, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
-  const collumesWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme}>{items.header.value.substring(0, 7)}</TableRowColumn>), collumes)
-  return (<TableRow key={idx} >{collumesWithFirst}</TableRow>);
+  const columns = mapIndexed(generateColumn, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
+  const columnsWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme}>{items.header.value.substring(0, 7)}</TableRowColumn>), columns)
+  return (<TableRow key={idx} >{columnsWithFirst}</TableRow>);
 }
 
-const generateCollume = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
+const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)}>{item.value}</TableRowColumn>);
 
 const AbsenceTable = (props) => (
   <Card style={styles.absenceCard}>

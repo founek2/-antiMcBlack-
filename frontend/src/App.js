@@ -30,6 +30,7 @@ class App extends Component {
 
   
   _handleLogin = async (userName, passwd) => {
+    this.setState({logInProggres: true})
     const result = await logIn(userName, passwd);
     console.log(result)
     if (path(['login'], result) === 'success') {
@@ -37,9 +38,10 @@ class App extends Component {
       sessionStorage.setItem('cid', path(['cid'], result),);
       sessionStorage.setItem('userName', userName);
       sessionStorage.setItem('loginMessage', path(['message'], result));
-    } else {
-      this.setState({ logged: false });
+    } else if(path(['login'], result) === 'denied') {
+      this.setState({ logged: false, logError: 'Špatné jméno nebo heslo' });
     }
+    this.setState({logInProggres: false})
   }
   _handleLogOut = () => {
     this.setState({
@@ -58,7 +60,7 @@ class App extends Component {
         userName={this.state.userName}
         class={this.state.loginMessage.split(' ')[2]}
       /> :
-       <Login handleLogin={this._handleLogin} />;
+       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} />;
 
   render() {
 
