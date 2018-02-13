@@ -34,7 +34,7 @@ class App extends Component {
     const result = await logIn(userName, passwd);
     console.log(result)
     if (path(['login'], result) === 'success') {
-      this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result)});
+      this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result), logError: ''});
       sessionStorage.setItem('cid', path(['cid'], result),);
       sessionStorage.setItem('userName', userName);
       sessionStorage.setItem('loginMessage', path(['message'], result));
@@ -60,7 +60,7 @@ class App extends Component {
         userName={this.state.userName}
         class={this.state.loginMessage.split(' ')[2]}
       /> :
-       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} />;
+       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} logError={this.state.logError} />;
 
   render() {
 

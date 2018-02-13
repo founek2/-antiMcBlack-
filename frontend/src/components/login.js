@@ -78,7 +78,7 @@ class Login extends Component {
                             onChange={this._handleOnChange}
                             value={path(['inputs','password', 'value'],this.state)}
                             onKeyPress={(e) => e.key === 'Enter' && this._handleLogin()}                            
-                            errorText={!path(['inputs','password', 'valid'],this.state) && path(['inputs','password', 'errorMessage'],this.state)}
+                            errorText={(!path(['inputs','password', 'valid'],this.state) && path(['inputs','password', 'errorMessage'],this.state)) || this.props.logError}
                             />
                     </CardText>
                     <CardActions style={styles.loginCardActions}>

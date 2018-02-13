@@ -31,11 +31,9 @@ app.use(compression());
     }
 }));
 app.use(helmet.referrerPolicy({ policy: 'origin' }));
-app.use(helmet({
-  frameguard: false
-}));
-process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
 
+process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
+process.env.NODE_ENV === 'production' && app.use(helmet());
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
