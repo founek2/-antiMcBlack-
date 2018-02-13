@@ -10,6 +10,7 @@ var compression = require('compression');
 
 var ServiceData = require("./bin/serviceData");
 var routeApi = require('./routes/api');
+var routeIndex = require('./routes/index');
 var routeIntranet = require('./routes/intranet');
 
 var app = express();
@@ -33,6 +34,10 @@ app.use(helmet.referrerPolicy({ policy: 'origin' }));
 app.use(helmet());
 process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
 
+app.use(helmet.frameguard({ 
+  action: 'allow-from',
+  domain: 'http://localhost'
+ }))
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -47,6 +52,7 @@ var apiLimiter = new RateLimit({
 app.use('/api/', apiLimiter);
 app.use('/api', routeApi(new ServiceData()));
 app.use('/intranet', routeIntranet);
+app.use('/', routeIndex)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

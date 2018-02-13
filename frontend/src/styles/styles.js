@@ -72,4 +72,11 @@ export const styles = {
         display: 'flex',
         justifyContent: 'space-between',
     },
+    passwordDialog: {
+        textAlign: 'center',
+    },
+    timeTableIframe: {
+        width: '100%',
+        height: '100%'
+    }
 };

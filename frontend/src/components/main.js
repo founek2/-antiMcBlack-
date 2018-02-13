@@ -10,16 +10,26 @@ import Drawer from 'material-ui/Drawer';
 import { styles } from '../styles/styles';
 import AbsenceTable from './absenceTable';
 import GradesTable from './gradesTable';
-import { logIn, getAbsence, rightsAbsence, rightsClassification, getClassification } from '../api';
+import { logIn, getAbsence, rightsAbsence, rightsClassification, getClassification, changePassword } from '../api';
 import ClickOutside from 'react-click-outside';
 import Default from './default';
-import { path, mergeDeepWith, concat } from 'ramda';
+import { path, mergeDeepWith, concat, assocPath } from 'ramda';
 import deepmerge from 'deepmerge';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import TimeTable from './timeTable';
+
+const getNameFromEvent = path(['target', 'name'])
+const getValueFromEvent = path(['target', 'value'])
+
+const setInput = (name, value) => (state, props) => assocPath(['inputs', name, 'value'], value, state);
 
 const menuComponents = {
     default: () => <Default />,
-    absence: (props) => <AbsenceTable {...props.absence}/>,
+    absence: (props) => <AbsenceTable {...props.absence} />,
     classification: (props) => <GradesTable {...props.classification} />,
+    timeTable: (props) => <TimeTable {...props.timeTable} />,
     files: 'Soubory (in far future)'
 };
 
@@ -34,7 +44,7 @@ const Logged = (props) => {
             anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             onItemClick={props.handleItemClick}
         >
-            <MenuItem primaryText="Help" value='help' />
+            <MenuItem primaryText="Change Password" value='changePasswd' />
             <MenuItem primaryText="Sign out" value='logOut' />
         </IconMenu>
     </div>)
@@ -49,6 +59,7 @@ class Main extends Component {
             open: false,
             activeComponent: 'default',
             menuItemsStyles: {},
+            openDialogPassword: false,
             absenceState: {
                 numberOfRecords: 10,
                 currentWeek: 0,
@@ -58,6 +69,27 @@ class Main extends Component {
             },
             classificationState: {
                 period: 2,
+            },
+            inputs: {
+                passwordNew: {
+                    value: '',
+                    valid: true,
+                    errorMessage: 'Password musí mít min. délku 5 znaků',
+                },
+                passwordNewAgain: {
+                    value: '',
+                    valid: true,
+                    errorMessage: 'Hesla se neshodují',
+                },
+                passwordOld: {
+                    value: '',
+                    valid: true,
+                    errorMessage: 'Password musí mít min. délku 5 znaků',
+                },
+                dialog: {
+                    valid: true,
+                    errorMessage: 'Zadané heslo není správné'
+                }
             }
         };
         this._lazyLoadContent();
@@ -72,7 +104,7 @@ class Main extends Component {
         const classificationResp = await getClassification(this.props.cid, this.state.classificationState.period);
         const newClassificationState = this.state.classificationState;
         newClassificationState.response = classificationResp;
-        
+
         this.setState({
             classificationState: newClassificationState,
         })
@@ -86,8 +118,8 @@ class Main extends Component {
         console.log('mergeRes', absenceRespMerged)
         const newAbsenceState = this.state.absenceState;
         newAbsenceState.items = [];
-        const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items})
-     
+        const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items })
+
         this.setState({
             absenceState: newAbsenceState2,
         })
@@ -105,7 +137,7 @@ class Main extends Component {
             for (let i = currentWeek - 1; i >= 1 && (currentWeek - i) !== a; i--) {
                 const absenceResp2 = await getAbsence(this.props.cid, this.state.absenceState.period, i);
                 itemsNew = deepmerge(absenceResp2.items, itemsNew)
-                newCurrentWeek = i; 
+                newCurrentWeek = i;
                 console.log('call for absence week ' + i)
             }
 
@@ -132,6 +164,7 @@ class Main extends Component {
     }
     _handleRightMenuItemClick = (e, item) => {
         if (item.props.value === 'logOut') this.props.handleLogOut();
+        if (item.props.value === 'changePasswd') this._hangleChangePasswordMenu();
     }
     _handleChangePeriodAbsence = (e, isChecked) => {
         const newAbsenceState = this.state.absenceState;
@@ -144,6 +177,55 @@ class Main extends Component {
         newClassificationState.period = isChecked ? 2 : 1;
         this.setState({ classificationState: newClassificationState });
         this._loadClassification();
+    }
+    _handleChangePassword = async () => {
+        const passwd = path(['inputs', 'passwordNew', 'value'], this.state);
+        const passwdAgain = path(['inputs', 'passwordNewAgain', 'value'], this.state);
+        const passwdOld = path(['inputs', 'passwordOld', 'value'], this.state);
+        let newState = this.state;
+
+        if (passwdAgain !== passwd) {
+            newState = assocPath(['inputs', 'passwordNewAgain', 'valid'], false, newState)
+        } else {
+            newState = assocPath(['inputs', 'passwordNewAgain', 'valid'], true, newState)
+        }
+        if (passwd.length < 5) {
+            newState = assocPath(['inputs', 'passwordNew', 'valid'], false, newState)
+        } else {
+            newState = assocPath(['inputs', 'passwordNew', 'valid'], true, newState)
+        }
+        newState = assocPath(['inputs', 'dialog', 'valid'], true, newState)
+        if (passwdOld.length < 5) {
+            newState = assocPath(['inputs', 'passwordOld', 'valid'], false, newState)
+        } else {
+            newState = assocPath(['inputs', 'passwordOld', 'valid'], true, newState)
+        }
+        this.setState(newState)
+        console.log(newState)
+        const inputsState = newState.inputs;
+        inputsState.passwordOld.valid && inputsState.passwordNew.valid && inputsState.passwordNewAgain.valid && this._changePassword(this.props.cid, passwdOld, passwd)
+    }
+    _changePassword = async (cid, oldPasswd, newPasswd) => {
+        const response = await changePassword(cid, oldPasswd, newPasswd);
+        console.log(response.status === 'success')
+        if (response.status === 'success') this._hangleChangePasswordMenu();
+        if (response.status === 'mismatch') {
+            const inputs = this.state.inputs;
+            inputs.dialog.valid = false;
+            this.setState({ inputs });
+        }
+    }
+    _hangleChangePasswordMenu = () => {
+        this.setState({ openDialogPassword: !this.state.openDialogPassword })
+    }
+    _handleOnChange = (e) => {
+        e.persist();
+        this.setState(setInput(getNameFromEvent(e), getValueFromEvent(e)));
+        console.log(this[getNameFromEvent(e)])
+        setTimeout(() => {
+            this[getNameFromEvent(e)].focus();
+        }, 10);
+
     }
     render() {
         return (
@@ -163,6 +245,7 @@ class Main extends Component {
                         >
                             <MenuItem style={this.state.menuItemsStyles.absence} value='absence'>Absence</MenuItem>
                             <MenuItem style={this.state.menuItemsStyles.classification} value='classification'>Klasifikace</MenuItem>
+                            <MenuItem  value='timeTable'>Rozvrh</MenuItem>
                             <MenuItem style={this.state.menuItemsStyles.files} value=''>Soubory (in far future)</MenuItem>
                         </Menu>
                     </Drawer>
@@ -178,7 +261,72 @@ class Main extends Component {
                         period: this.state.classificationState.period,
                         handlePeriodChange: this._handleChangePeriodClassification,
                     },
+                    timeTable: {
+                        class: this.props.class,
+                    }
                 })}
+
+                <Dialog
+                    title="Change password"
+                    actions={[
+                        <FlatButton
+                            label="Cancel"
+                            primary={false}
+                            keyboardFocused={false}
+                            onClick={this._hangleChangePasswordMenu}
+                        />,
+                        <FlatButton
+                            label="Ok"
+                            primary={true}
+                            keyboardFocused={true}
+                            onClick={this._handleChangePassword}
+                        />
+                    ]}
+                    modal={false}
+                    open={this.state.openDialogPassword}
+                    onRequestClose={this._hangleChangePasswordMenu}
+                    style={styles.passwordDialog}
+                >
+                    <TextField
+                        type='password'
+                        name='passwordOld'
+                        floatingLabelText="Old password"
+                        floatingLabelStyle={styles.textColor}
+                        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                        underlineStyle={styles.underlineStyle}
+                        underlineFocusStyle={styles.underlineFocusStyle}
+                        onChange={this._handleOnChange}
+                        ref={(input) => this.passwordOld = input}
+                        value={path(['inputs', 'passwordOld', 'value'], this.state)}
+                        errorText={(!path(['inputs', 'passwordOld', 'valid'], this.state) && path(['inputs', 'passwordOld', 'errorMessage'], this.state)) || !path(['inputs', 'dialog', 'valid'], this.state) && path(['inputs', 'dialog', 'errorMessage'], this.state)}
+                    /><br />
+                    <TextField
+                        type='password'
+                        name='passwordNew'
+                        floatingLabelText="new password"
+                        floatingLabelStyle={styles.textColor}
+                        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                        underlineStyle={styles.underlineStyle}
+                        underlineFocusStyle={styles.underlineFocusStyle}
+                        onChange={this._handleOnChange}
+                        ref={(input) => this.passwordNew = input}
+                        value={path(['inputs', 'passwordNew', 'value'], this.state)}
+                        errorText={!path(['inputs', 'passwordNew', 'valid'], this.state) && path(['inputs', 'passwordNew', 'errorMessage'], this.state)}
+                    /><br />
+                    <TextField
+                        type='password'
+                        name='passwordNewAgain'
+                        floatingLabelText="password again"
+                        floatingLabelStyle={styles.textColor}
+                        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                        underlineStyle={styles.underlineStyle}
+                        underlineFocusStyle={styles.underlineFocusStyle}
+                        ref={(input) => this.passwordNewAgain = input}
+                        onChange={this._handleOnChange}
+                        value={path(['inputs', 'passwordNewAgain', 'value'], this.state)}
+                        errorText={!path(['inputs', 'passwordNewAgain', 'valid'], this.state) && path(['inputs', 'passwordNewAgain', 'errorMessage'], this.state)}
+                    />
+                </Dialog>
             </div>
         );
     }

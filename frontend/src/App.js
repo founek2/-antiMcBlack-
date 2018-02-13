@@ -12,10 +12,14 @@ class App extends Component {
     super(props);
 
     const cid = sessionStorage.getItem('cid');
+    const userName = sessionStorage.getItem('userName');
+    const loginMessage = sessionStorage.getItem('loginMessage');
     if (cid) {
       this.state = {
         logged: true,
         cid: cid,
+        userName,
+        loginMessage,
       }
     } else {
       this.state = {
@@ -29,8 +33,10 @@ class App extends Component {
     const result = await logIn(userName, passwd);
     console.log(result)
     if (path(['login'], result) === 'success') {
-      this.setState({ logged: true, cid: path(['cid'], result) });
-      sessionStorage.setItem('cid', path(['cid'], result));
+      this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result)});
+      sessionStorage.setItem('cid', path(['cid'], result),);
+      sessionStorage.setItem('userName', userName);
+      sessionStorage.setItem('loginMessage', path(['message'], result));
     } else {
       this.setState({ logged: false });
     }
@@ -49,6 +55,8 @@ class App extends Component {
          classificationResponse={this.state.classificationResponse}
         handleLogOut={this._handleLogOut}
         cid={this.state.cid}
+        userName={this.state.userName}
+        class={this.state.loginMessage.split(' ')[2]}
       /> :
        <Login handleLogin={this._handleLogin} />;
 

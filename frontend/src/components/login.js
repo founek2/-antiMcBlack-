@@ -51,7 +51,7 @@ class Login extends Component {
         return (
             <div >
                 <Card className='loginCard'>
-                    <CardTitle title='McWhite' titleColor={pink500} />
+                    <CardTitle title='- McWhite -' titleColor={pink500} />
                     <CardText >
                         <TextField
                             type='username'

@@ -72,3 +72,18 @@ export const getClassification = async (cid, period, week) => {
     const data = await response.json();
     return await data.response;
 }
+
+export const changePassword = async (cid, userName, password) => {
+    const response = await fetch("/intranet", {
+        method: "POST",
+        body: JSON.stringify({ "command":"user:password","password": encodeToken(userName, password)}),
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'x-cid': cid,
+        }
+    });
+    //  return await response.ok ? result.json() : toogleError()
+    const data = await response.json();
+    return await data.response;
+}
