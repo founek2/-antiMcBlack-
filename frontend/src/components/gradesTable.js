@@ -47,10 +47,10 @@ const generateHeaderRowDesktop = (width) => {
             adjustForCheckbox={false}
             enableSelectAll={false}>
             <TableRow>
-                <TableHeaderColumn tooltip="Název předmětu" >Název předmětu</TableHeaderColumn>
-                <TableHeaderColumn colSpan={colSpanGradesHeader()} style={styles.gradesColumnHeader} tooltip="Známky"  className='gradesColumnHeader'>Známky</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Výsledná známka" style={styles.averageColumnHeader}>Výsledná známka</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Absence" style={styles.absenceColumnHeader}>Absence</TableHeaderColumn>
+                <TableHeaderColumn >Název předmětu</TableHeaderColumn>
+                <TableHeaderColumn colSpan={colSpanGradesHeader()} style={styles.gradesColumnHeader} className='gradesColumnHeader'>Známky</TableHeaderColumn>
+                <TableHeaderColumn style={styles.averageColumnHeader}>Výsledná známka</TableHeaderColumn>
+                <TableHeaderColumn style={styles.absenceColumnHeader}>Absence</TableHeaderColumn>
             </TableRow>
         </TableHeader>
     )
@@ -61,9 +61,9 @@ const generateHeaderRowMobile = (width) => {
             adjustForCheckbox={false}
             enableSelectAll={false}>
             <TableRow>
-                <TableHeaderColumn  tooltip="Známky">Známky</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Výsledná známka" className='averageColumnHeader'>Výsledná známka</TableHeaderColumn>
-                <TableHeaderColumn tooltip="Absence">Absence</TableHeaderColumn>
+                <TableHeaderColumn  >Známky</TableHeaderColumn>
+                <TableHeaderColumn  className='averageColumnHeader'>Výsledná známka</TableHeaderColumn>
+                <TableHeaderColumn >Absence</TableHeaderColumn>
             </TableRow>
         </TableHeader>
     )

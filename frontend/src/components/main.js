@@ -4,16 +4,15 @@ import Menu from 'material-ui/Menu';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import { styles } from '../styles/styles';
 import AbsenceTable from './absenceTable';
 import GradesTable from './gradesTable';
-import { logIn, getAbsence, rightsAbsence, rightsClassification, getClassification, changePassword } from '../api';
+import { getAbsence, rightsAbsence, rightsClassification, getClassification, changePassword } from '../api';
 import ClickOutside from 'react-click-outside';
 import Default from './default';
-import { path, mergeDeepWith, concat, assocPath } from 'ramda';
+import { path, concat, assocPath, map, flatten } from 'ramda';
 import deepmerge from 'deepmerge';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -59,76 +58,113 @@ class Main extends Component {
         this.state = mainDefaultState;
         this._lazyLoadContent();
     }
-    _lazyLoadContent = async () => {
-        await rightsAbsence(this.props.cid);
-        this._loadDefAbsence()
-        await rightsClassification(this.props.cid);
-        this._loadClassification();
+    _lazyLoadContent = () => {
+        rightsAbsence(this.props.cid).then(() => this._loadDefAbsence());
+
+        rightsClassification(this.props.cid).then(() => this._loadClassification());
     }
-    _handleFetchingData = (path, value) =>{
+    _handleFetchingData = (path, value) => {
         console.log(path, value)
         this.setState({
-           [path]: assocPath([ 'fetchingData'],value, this.state[path]),
-        })
-    } 
-
-    _loadClassification = async () => {
-        
-        this._handleFetchingData('absenceState', true)
-        
-        const classificationResp = await getClassification(this.props.cid, this.state.classificationState.period);
-        const newClassificationState = this.state.classificationState;
-        newClassificationState.response = classificationResp;
-
-        this._handleFetchingData('absenceState', false)
-        this.setState({
-            classificationState: newClassificationState,
+            [path]: assocPath(['fetchingData'], value, this.state[path]),
         })
     }
-    _loadDefAbsence = async () => {
+
+    _loadClassification = () => {
+
+        this._handleFetchingData('absenceState', true)
+
+        getClassification(this.props.cid, this.state.classificationState.period)
+            .then((classificationResp) => {
+                const newClassificationState = this.state.classificationState;
+                newClassificationState.response = classificationResp;
+
+                this.setState({
+                    classificationState: newClassificationState,
+                })
+                this._handleFetchingData('absenceState', false)
+            })
+
+    }
+    _loadDefAbsence = () => {
         this._handleFetchingData('absenceState', true)
         console.log('absencePeriod ' + this.state.absenceState.period)
-        const absenceResp = await getAbsence(this.props.cid, this.state.absenceState.period, 0);
-        const numberOfWeekBefore = absenceResp.total - 1;
-        const absenceResp2 = await getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore);
-        const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
-        console.log('mergeRes', absenceRespMerged)
-        const newAbsenceState = this.state.absenceState;
-        newAbsenceState.items = [];
-        const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items })
+        getAbsence(this.props.cid, this.state.absenceState.period, 0)
+            .then((absenceResp) => {
+                const numberOfWeekBefore = absenceResp.total - 1;
+                getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
+                    .then((absenceResp2) => {
+                        const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
+                        console.log('mergeRes', absenceRespMerged)
+                        const newAbsenceState = this.state.absenceState;
+                        newAbsenceState.items = [];
+                        const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items, numberOfRecords: 10 })
 
-        this.setState({
-            absenceState: newAbsenceState2,
-        })
-        this._handleFetchingData('absenceState', false)
+                        this.setState({
+                            absenceState: newAbsenceState2,
+                        })
+
+                        this._handleFetchingData('absenceState', false)
+
+
+                    })
+
+            })
+
     }
-    _handleNumberOfAbsenceRecords = async (e, value) => {
+    _handleNumberOfAbsenceRecords = (e, value) => {
         this._handleFetchingData('absenceState', true)
 
-        let itemsNew = this.state.absenceState.items;
         let newCurrentWeek = this.state.absenceState.currentWeek;
         const {
             numberOfRecords,
             currentWeek
         } = this.state.absenceState;
+        console.log('condition for call', value > numberOfRecords && currentWeek > 1)
         if (value > numberOfRecords && currentWeek > 1) {
-            const numberOfWeeks = [];
             const a = value / 5;
+            const arrayOfPromises = [];
+
             for (let i = currentWeek - 1; i >= 1 && (currentWeek - i) !== a; i--) {
-                const absenceResp2 = await getAbsence(this.props.cid, this.state.absenceState.period, i);
-                itemsNew = deepmerge(absenceResp2.items, itemsNew)
+                arrayOfPromises.push(getAbsence(this.props.cid, this.state.absenceState.period, i))
                 newCurrentWeek = i;
                 console.log('call for absence week ' + i)
             }
+            Promise.all(arrayOfPromises).then(arrayResults => {
 
-        };
+                const absenceState = this.state.absenceState;
+                const resItems = map((object) => object.items, arrayResults);
+                const newItems = concat(absenceState.items, flatten(resItems));
+
+
+                absenceState.numberOfRecords = value;
+                absenceState.currentWeek = newCurrentWeek;
+                absenceState.items = newItems;
+
+                this.setState({ absenceState: absenceState })
+
+                this._handleFetchingData('absenceState', false)
+
+            })
+        } else {
+            const newAbsenceState = this.state.absenceState;
+
+            newAbsenceState.numberOfRecords = value;
+            this.setState({
+                absenceState: newAbsenceState
+            })
+            this._handleFetchingData('absenceState', false)
+
+            
+        }
+
         //TODO přepsat manipulaci s objektem
-        let newAbsenceState = this.state.absenceState;
-        newAbsenceState.items = itemsNew;
-        newAbsenceState.numberOfRecords = value;
-        newAbsenceState.currentWeek = newCurrentWeek;
-        this.setState({ absenceState: newAbsenceState })
-        this._handleFetchingData('absenceState', false)
+        /*      let newAbsenceState = this.state.absenceState;
+              newAbsenceState.items = itemsNew;
+              newAbsenceState.numberOfRecords = value;
+              newAbsenceState.currentWeek = newCurrentWeek;
+              this.setState({ absenceState: newAbsenceState })
+              this._handleFetchingData('absenceState', false)*/
     }
     handleClickOutside() {
         this._handleESC();
@@ -186,15 +222,18 @@ class Main extends Component {
         const inputsState = newState.inputs;
         inputsState.passwordOld.valid && inputsState.passwordNew.valid && inputsState.passwordNewAgain.valid && this._changePassword(this.props.cid, passwdOld, passwd)
     }
-    _changePassword = async (cid, oldPasswd, newPasswd) => {
-        const response = await changePassword(cid, oldPasswd, newPasswd);
-        console.log(response.status === 'success')
-        if (response.status === 'success') this._hangleChangePasswordMenu();
-        if (response.status === 'mismatch') {
-            const inputs = this.state.inputs;
-            inputs.dialog.valid = false;
-            this.setState({ inputs });
-        }
+    _changePassword = (cid, oldPasswd, newPasswd) => {
+        changePassword(cid, oldPasswd, newPasswd)
+            .then((response) => {
+                console.log(response.status === 'success')
+                if (response.status === 'success') this._hangleChangePasswordMenu();
+                if (response.status === 'mismatch') {
+                    const inputs = this.state.inputs;
+                    inputs.dialog.valid = false;
+                    this.setState({ inputs });
+                }
+            })
+
     }
     _hangleChangePasswordMenu = () => {
         this.setState({ openDialogPassword: !this.state.openDialogPassword })
@@ -225,7 +264,7 @@ class Main extends Component {
                         >
                             <MenuItem style={this.state.menuItemsStyles.absence} value='absence'>Absence</MenuItem>
                             <MenuItem style={this.state.menuItemsStyles.classification} value='classification'>Klasifikace</MenuItem>
-                            <MenuItem  value='timeTable'>Rozvrh</MenuItem>
+                            <MenuItem value='timeTable'>Rozvrh</MenuItem>
                             <MenuItem style={this.state.menuItemsStyles.files} value=''>Soubory (in far future)</MenuItem>
                         </Menu>
                     </Drawer>

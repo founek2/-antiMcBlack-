@@ -3,9 +3,8 @@ import Login from "./components/login";
 import Main from "./components/main";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import 'typeface-roboto'
-import { logIn, getAbsence, rightsAbsence, rightsClassification, getClassification } from './api';
-import { path, mergeDeepWith, concat } from 'ramda';
-import deepmerge from 'deepmerge';
+import { logIn, logOut } from './api';
+import { path } from 'ramda';
 
 class App extends Component {
   constructor(props) {
@@ -28,39 +27,43 @@ class App extends Component {
     }
   }
 
-  
-  _handleLogin = async (userName, passwd) => {
-    this.setState({logInProggres: true})
-    const result = await logIn(userName, passwd);
-    console.log(result)
-    if (path(['login'], result) === 'success') {
-      this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result), logError: ''});
-      sessionStorage.setItem('cid', path(['cid'], result),);
-      sessionStorage.setItem('userName', userName);
-      sessionStorage.setItem('loginMessage', path(['message'], result));
-    } else if(path(['login'], result) === 'denied') {
-      this.setState({ logged: false, logError: 'Špatné jméno nebo heslo' });
-    }
-    this.setState({logInProggres: false})
+
+  _handleLogin = (userName, passwd) => {
+    this.setState({ logInProggres: true })
+    logIn(userName, passwd)
+      .then((result) => {
+        console.log(result)
+        if (path(['login'], result) === 'success') {
+          this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result), logError: '' });
+          sessionStorage.setItem('cid', path(['cid'], result), );
+          sessionStorage.setItem('userName', userName);
+          sessionStorage.setItem('loginMessage', path(['message'], result));
+        } else if (path(['login'], result) === 'denied') {
+          this.setState({ logged: false, logError: 'Špatné jméno nebo heslo' });
+        }
+        this.setState({ logInProggres: false })
+      })
+
   }
   _handleLogOut = () => {
     this.setState({
       logged: false,
       cid: undefined,
     })
-    sessionStorage.removeItem('cid')
+    sessionStorage.removeItem('cid');
+    logOut(this.state.cid);
   }
   _renderContent = () =>
-    this.state.logged ? 
+    this.state.logged ?
       <Main
-         absenceResponse={this.state.absenceResponse} 
-         classificationResponse={this.state.classificationResponse}
+        absenceResponse={this.state.absenceResponse}
+        classificationResponse={this.state.classificationResponse}
         handleLogOut={this._handleLogOut}
         cid={this.state.cid}
         userName={this.state.userName}
         class={this.state.loginMessage.split(' ')[2]}
       /> :
-       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} logError={this.state.logError} />;
+      <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} logError={this.state.logError} />;
 
   render() {
 

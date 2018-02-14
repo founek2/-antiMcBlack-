@@ -96,4 +96,7 @@ export const styles = {
     absenceTableHeaderRow:{
         width: '99%'
     },
+    absenceRadioButtonGroup: {
+        width: '370px',
+    }
 };

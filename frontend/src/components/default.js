@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Card, CardTitle, CardText } from 'material-ui/Card';
 import { pink500 } from 'material-ui/styles/colors';
 
 class Default extends Component {

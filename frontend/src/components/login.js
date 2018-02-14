@@ -4,7 +4,7 @@ import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import { styles } from '../styles/styles'
 import { pink500 } from 'material-ui/styles/colors';
-import { path, assocPath, prop } from 'ramda';
+import { path, assocPath } from 'ramda';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const getNameFromEvent = path(['target', 'name'])

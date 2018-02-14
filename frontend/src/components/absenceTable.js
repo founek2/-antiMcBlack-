@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -7,14 +7,12 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice, compose, prop, lt } from 'ramda';
+import { insert, merge, reverse, slice, lt } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
-import { getAbsence } from '../api'
-import deepmerge from 'deepmerge';
+import { Card } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 import CircularProgress from 'material-ui/CircularProgress';
 const mobileView = () => lt(window.innerWidth, 580)
@@ -43,7 +41,6 @@ const AbsenceTable = (props) => (
       <div style={styles.absencePeriodSwitchContainer}>
         <Toggle
           label="Pololetí 1."
-          style={styles.toggle}
           trackSwitchedStyle={styles.trackSwitched}
           thumbSwitchedStyle={styles.thumbSwitched}
           style={styles.periodSwitch}
@@ -53,30 +50,41 @@ const AbsenceTable = (props) => (
         <span>2.</span>
         <CircularProgress size={25} thickness={3} style={!props.absenceState.fetchingData ? {display: 'none'} : {}}/>
       </div>
-      <RadioButtonGroup style={{ width: '300px' }} name="numberOfRecords" defaultSelected="10" labelPosition='right' onChange={props.handleNumberOfRecords}>
+      <RadioButtonGroup
+        style={styles.absenceRadioButtonGroup}
+        name="numberOfRecords"
+        labelPosition='right'
+        onChange={props.handleNumberOfRecords}
+        valueSelected={props.absenceState.numberOfRecords}
+      >
         <RadioButton
-          value="5"
+          value={5}
           label="5"
           style={styles.radioButton}
         />
         <RadioButton
-          value="10"
+          value={10}
           label="10"
           style={styles.radioButton}
         />
         <RadioButton
-          value="20"
+          value={20}
           label="20"
           style={styles.radioButton}
         />
-        <RadioButton
-          value="50"
+         <RadioButton
+          value={50}
           label="50"
+          style={styles.radioButton}
+        />
+                <RadioButton
+          value={1000}
+          label="vše"
           style={{ ...styles.radioButton, float: 'none' }}
         />
       </RadioButtonGroup>
     </div>
-    <Table style={styles.absenceTableHeaderRow}>
+    <Table style={styles.absenceTableHeaderRow} selectable={false}>
       <TableHeader
         displaySelectAll={false}
         adjustForCheckbox={false}
