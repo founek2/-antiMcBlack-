@@ -9,13 +9,14 @@ import Drawer from 'material-ui/Drawer';
 import { styles } from '../styles/styles';
 import AbsenceTable from './absenceTable';
 import GradesTable from './gradesTable';
-import { getAbsence, rightsAbsence, rightsClassification, getClassification, changePassword } from '../api';
+import ApiHandler from '../api';
 import ClickOutside from 'react-click-outside';
 import Default from './default';
 import { path, concat, assocPath, map, flatten } from 'ramda';
 import deepmerge from 'deepmerge';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 import FlatButton from 'material-ui/FlatButton';
 import TimeTable from './timeTable';
 import mainDefaultState from '../constants/mainDefaultState';
@@ -53,15 +54,22 @@ const Logged = (props) => {
 Logged.muiName = 'IconMenu';
 
 class Main extends Component {
+    _apiErrorCallback = (e) => {
+        this.setState({ errorState: { fetchError: e.message,fetchErrorMsg:'Bez připojení k internetu', errorOpen: true } })
+    }
+    _closeError=()=>{
+        this.setState({ errorState: { errorOpen: false }});     
+    }
     constructor(props) {
         super(props);
         this.state = mainDefaultState;
+        this.apiHandler = new ApiHandler(this._apiErrorCallback);
         this._lazyLoadContent();
     }
     _lazyLoadContent = () => {
-        rightsAbsence(this.props.cid).then(() => this._loadDefAbsence());
+        this.apiHandler.rightsAbsence(this.props.cid).then(() => this._loadDefAbsence());
 
-        rightsClassification(this.props.cid).then(() => this._loadClassification());
+        this.apiHandler.rightsClassification(this.props.cid).then(() => this._loadClassification());
     }
     _handleFetchingData = (path, value) => {
         console.log(path, value)
@@ -72,9 +80,9 @@ class Main extends Component {
 
     _loadClassification = () => {
 
-        this._handleFetchingData('absenceState', true)
+        this._handleFetchingData('classificationState', true)
 
-        getClassification(this.props.cid, this.state.classificationState.period)
+        this.apiHandler.getClassification(this.props.cid, this.state.classificationState.period)
             .then((classificationResp) => {
                 const newClassificationState = this.state.classificationState;
                 newClassificationState.response = classificationResp;
@@ -82,17 +90,17 @@ class Main extends Component {
                 this.setState({
                     classificationState: newClassificationState,
                 })
-                this._handleFetchingData('absenceState', false)
+                this._handleFetchingData('classificationState', false)
             })
 
     }
     _loadDefAbsence = () => {
         this._handleFetchingData('absenceState', true)
         console.log('absencePeriod ' + this.state.absenceState.period)
-        getAbsence(this.props.cid, this.state.absenceState.period, 0)
+        this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
             .then((absenceResp) => {
                 const numberOfWeekBefore = absenceResp.total - 1;
-                getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
+                this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
                     .then((absenceResp2) => {
                         const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
                         console.log('mergeRes', absenceRespMerged)
@@ -126,7 +134,7 @@ class Main extends Component {
             const arrayOfPromises = [];
 
             for (let i = currentWeek - 1; i >= 1 && (currentWeek - i) !== a; i--) {
-                arrayOfPromises.push(getAbsence(this.props.cid, this.state.absenceState.period, i))
+                arrayOfPromises.push(this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, i))
                 newCurrentWeek = i;
                 console.log('call for absence week ' + i)
             }
@@ -155,7 +163,7 @@ class Main extends Component {
             })
             this._handleFetchingData('absenceState', false)
 
-            
+
         }
 
         //TODO přepsat manipulaci s objektem
@@ -223,7 +231,7 @@ class Main extends Component {
         inputsState.passwordOld.valid && inputsState.passwordNew.valid && inputsState.passwordNewAgain.valid && this._changePassword(this.props.cid, passwdOld, passwd)
     }
     _changePassword = (cid, oldPasswd, newPasswd) => {
-        changePassword(cid, oldPasswd, newPasswd)
+        this.apiHandler.changePassword(cid, oldPasswd, newPasswd)
             .then((response) => {
                 console.log(response.status === 'success')
                 if (response.status === 'success') this._hangleChangePasswordMenu();
@@ -279,6 +287,7 @@ class Main extends Component {
                         response: this.state.classificationState.response,
                         period: this.state.classificationState.period,
                         handlePeriodChange: this._handleChangePeriodClassification,
+                        classificationState: this.state.classificationState,
                     },
                     timeTable: {
                         class: this.props.class,
@@ -346,6 +355,13 @@ class Main extends Component {
                         errorText={!path(['inputs', 'passwordNewAgain', 'valid'], this.state) && path(['inputs', 'passwordNewAgain', 'errorMessage'], this.state)}
                     />
                 </Dialog>
+                <Snackbar
+                    open={this.state.errorState.errorOpen}
+                    message={this.state.errorState.fetchErrorMsg}
+                    autoHideDuration={3000}
+                    action='Zavřít'
+                    onActionClick={this._closeError}
+                />
             </div>
         );
     }
