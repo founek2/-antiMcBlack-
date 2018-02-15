@@ -64,13 +64,8 @@ class App extends Component {
       logged: false,
       cid: undefined,
     })
-<<<<<<< HEAD
     sessionStorage.clear();
     logOut(this.state.cid);
-=======
-    sessionStorage.removeItem('cid');
-    this.apiHandler.logOut(this.state.cid);
->>>>>>> bd9c860ff0e780c2af3e0d3d410e402927414e9c
   }
   _renderContent = () =>
     this.state.logged ?
