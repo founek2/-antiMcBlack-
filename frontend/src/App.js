@@ -50,7 +50,7 @@ class App extends Component {
       logged: false,
       cid: undefined,
     })
-    sessionStorage.removeItem('cid');
+    sessionStorage.clear();
     logOut(this.state.cid);
   }
   _renderContent = () =>
