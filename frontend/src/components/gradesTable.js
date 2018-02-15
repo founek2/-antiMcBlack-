@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { map, path, length, max, reduce, append, repeat, unnest, prop, addIndex, takeLast, lt, splitEvery } from 'ramda';
 import response from "../apiResponses/gradesResponse";
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import CircularProgress from 'material-ui/CircularProgress';
 import {
     Table,
     TableBody,
@@ -141,6 +142,8 @@ class Grades extends Component {
     }
     render() {
         const { width } = this.state;
+        const {response,classificationState} = this.props;
+        const {period,fetchingData} = classificationState;
         const isMobile = width <= 540;
         const render = isMobile ? this._renderForMobile : this._renderForDesktop
         return (
@@ -152,12 +155,13 @@ class Grades extends Component {
                         trackSwitchedStyle={styles.trackSwitched}
                         thumbSwitchedStyle={styles.thumbSwitched}
                         style={styles.periodSwitch}
-                        toggled={this.props.period === 2 ? true : false}
+                        toggled={period === 2 ? true : false}
                         onToggle={this.props.handlePeriodChange}
                     />
                     <span>2.</span>
+                    <CircularProgress size={25} thickness={3} style={!fetchingData ? {display: 'none'} : {}}/>
                 </div>
-                {render(this.props.response)}
+                {render(response)}
             </div>
         );
     }
