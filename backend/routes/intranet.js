@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const fetch = require('node-fetch');
+var  path =  require('path');
 
 router.post('/', function(req, res, next) {
     req.headers.host = "api.spse.cz";
@@ -18,5 +19,10 @@ router.post('/', function(req, res, next) {
     )
     /** odpověď na požadavek **/
 });
+
+router.get('/', function(req, res, next) {
+      res.sendFile('index.html', { root: path.join(__dirname, '../public/intranet') });
+  });
+
 
 module.exports = router;

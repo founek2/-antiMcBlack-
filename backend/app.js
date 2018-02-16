@@ -12,6 +12,7 @@ var ServiceData = require("./bin/serviceData");
 var routeApi = require('./routes/api');
 var routeIndex = require('./routes/index');
 var routeIntranet = require('./routes/intranet');
+var forceSsl = require('force-ssl')
 
 var app = express();
 

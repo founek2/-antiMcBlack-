@@ -3,6 +3,7 @@ export default {
       activeComponent: 'default',
       menuItemsStyles: {},
       openDialogPassword: false,
+      errorState: {},
       absenceState: {
           numberOfRecords: 10,
           currentWeek: 0,

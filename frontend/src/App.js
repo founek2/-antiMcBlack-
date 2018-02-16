@@ -46,7 +46,6 @@ class App extends Component {
     this.setState({ logInProggres: true })
     this.apiHandler.logIn(userName, passwd)
       .then((result) => {
-        console.log(result)
         if (path(['login'], result) === 'success') {
           this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result), logError: '' });
           sessionStorage.setItem('cid', path(['cid'], result), );
@@ -65,7 +64,7 @@ class App extends Component {
       cid: undefined,
     })
     sessionStorage.clear();
-    logOut(this.state.cid);
+    this.apiHandler.logOut(this.state.cid);
   }
   _renderContent = () =>
     this.state.logged ?

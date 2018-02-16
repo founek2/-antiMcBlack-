@@ -72,7 +72,7 @@ class Main extends Component {
         this.apiHandler.rightsClassification(this.props.cid).then(() => this._loadClassification());
     }
     _handleFetchingData = (path, value) => {
-        console.log(path, value)
+
         this.setState({
             [path]: assocPath(['fetchingData'], value, this.state[path]),
         })
@@ -96,14 +96,14 @@ class Main extends Component {
     }
     _loadDefAbsence = () => {
         this._handleFetchingData('absenceState', true)
-        console.log('absencePeriod ' + this.state.absenceState.period)
+
         this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
             .then((absenceResp) => {
                 const numberOfWeekBefore = absenceResp.total - 1;
                 this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
                     .then((absenceResp2) => {
                         const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
-                        console.log('mergeRes', absenceRespMerged)
+
                         const newAbsenceState = this.state.absenceState;
                         newAbsenceState.items = [];
                         const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items, numberOfRecords: 10 })
@@ -128,7 +128,7 @@ class Main extends Component {
             numberOfRecords,
             currentWeek
         } = this.state.absenceState;
-        console.log('condition for call', value > numberOfRecords && currentWeek > 1)
+
         if (value > numberOfRecords && currentWeek > 1) {
             const a = value / 5;
             const arrayOfPromises = [];
@@ -136,13 +136,13 @@ class Main extends Component {
             for (let i = currentWeek - 1; i >= 1 && (currentWeek - i) !== a; i--) {
                 arrayOfPromises.push(this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, i))
                 newCurrentWeek = i;
-                console.log('call for absence week ' + i)
+
             }
             Promise.all(arrayOfPromises).then(arrayResults => {
 
                 const absenceState = this.state.absenceState;
                 const resItems = map((object) => object.items, arrayResults);
-                const newItems = concat(absenceState.items, flatten(resItems));
+                const newItems = concat(flatten(resItems), absenceState.items);
 
 
                 absenceState.numberOfRecords = value;
@@ -154,6 +154,7 @@ class Main extends Component {
                 this._handleFetchingData('absenceState', false)
 
             })
+            .catch((e) => this._handleFetchingData('absenceState', false))
         } else {
             const newAbsenceState = this.state.absenceState;
 
@@ -226,14 +227,14 @@ class Main extends Component {
             newState = assocPath(['inputs', 'passwordOld', 'valid'], true, newState)
         }
         this.setState(newState)
-        console.log(newState)
+
         const inputsState = newState.inputs;
         inputsState.passwordOld.valid && inputsState.passwordNew.valid && inputsState.passwordNewAgain.valid && this._changePassword(this.props.cid, passwdOld, passwd)
     }
     _changePassword = (cid, oldPasswd, newPasswd) => {
         this.apiHandler.changePassword(cid, oldPasswd, newPasswd)
             .then((response) => {
-                console.log(response.status === 'success')
+
                 if (response.status === 'success') this._hangleChangePasswordMenu();
                 if (response.status === 'mismatch') {
                     const inputs = this.state.inputs;
