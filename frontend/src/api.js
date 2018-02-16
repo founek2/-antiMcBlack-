@@ -1,12 +1,13 @@
 import encodeToken from './utils/encodeToken';
 
+const intranetApiUrl = '/intranet/api';
 export default class Api {
     constructor(errorHandler) {
         this.errorHandler = errorHandler;
     }
 
     logIn = (userName, password) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST", body: JSON.stringify({ "command": "user:login", "login": encodeToken(userName, password) }), headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -21,7 +22,7 @@ export default class Api {
 
     rightsAbsence = (cid) => {
 
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "absence:rights" }),
             headers: {
@@ -40,7 +41,7 @@ export default class Api {
 
     }
     getAbsence = (cid, period, week) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "absence:student", "period": period, "week": week, "person": Number(cid.split(':')[0]) }),
             headers: {
@@ -57,7 +58,7 @@ export default class Api {
     }
 
     rightsClassification = (cid) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "classification:rights" }),
             headers: {
@@ -74,7 +75,7 @@ export default class Api {
     }
 
     getClassification = (cid, period, week) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "classification:show", "period": period, "person": Number(cid.split(':')[0]) }),
             headers: {
@@ -93,7 +94,7 @@ export default class Api {
     }
 
     changePassword = (cid, userName, password) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "user:password", "password": encodeToken(userName, password) }),
             headers: {
@@ -110,7 +111,7 @@ export default class Api {
     }
 
     logOut = (cid) => {
-        return fetch("/intranet", {
+        return fetch(intranetApiUrl, {
             method: "POST",
             body: JSON.stringify({ "command": "user:logout" }),
             headers: {

@@ -3,7 +3,7 @@ var router = express.Router();
 const fetch = require('node-fetch');
 var  path =  require('path');
 
-router.post('/', function(req, res, next) {
+router.post('/api', function(req, res, next) {
     req.headers.host = "api.spse.cz";
     req.headers.origin = "https://i3.spse.cz";
     req.headers.referer = "https://i3.spse.cz/";
