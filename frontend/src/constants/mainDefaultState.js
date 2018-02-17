@@ -3,7 +3,10 @@ export default (absenceState, classificationState) => ({
       activeComponent: 'default',
       menuItemsStyles: {},
       openDialogPassword: false,
-      errorState: {},
+      errorState: {
+            errorOpen: false,
+            fetchErrorMsg: '',
+      },
       absenceState: absenceState ? absenceState : {
           numberOfRecords: 10,
           currentWeek: 0,

@@ -7,15 +7,13 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice, lt } from 'ramda';
+import { insert, merge, reverse, slice } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Card } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-
-const mobileView = () => lt(window.innerWidth, 580)
 
 const generateHeaderRow = (headerArray) => (
   <TableRow >
@@ -35,7 +33,7 @@ const generateColumns = (items, idx) => {
 
 const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)} className='tableRowColumn'>{item.value}</TableRowColumn>);
 
-const AbsenceTable = (props) => (
+const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords}) => (
   <Card >
     <div style={styles.absenceTop}>
       <div style={styles.absencePeriodSwitchContainer}>
@@ -44,18 +42,18 @@ const AbsenceTable = (props) => (
           trackSwitchedStyle={styles.trackSwitched}
           thumbSwitchedStyle={styles.thumbSwitched}
           style={styles.periodSwitch}
-          toggled={props.absenceState.period === 2 ? true : false}
-          onToggle={props.handlePeriodChange}
+          toggled={absenceState.period === 2 ? true : false}
+          onToggle={handlePeriodChange}
         />
         <span>2.</span>
-       { props.absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
+       { absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
       </div>
       <RadioButtonGroup
         style={styles.absenceRadioButtonGroup}
         name="numberOfRecords"
         labelPosition='right'
-        onChange={props.handleNumberOfRecords}
-        valueSelected={props.absenceState.numberOfRecords}
+        onChange={handleNumberOfRecords}
+        valueSelected={absenceState.numberOfRecords}
       >
         <RadioButton
           value={5}
@@ -94,7 +92,7 @@ const AbsenceTable = (props) => (
       <TableBody
         displayRowCheckbox={false}
       >
-        {(props.absenceState.items && props.absenceState.items.length > 0) ? generateRows(props.absenceState.items, props.absenceState.numberOfRecords) : null}
+        {(absenceState.items && absenceState.items.length > 0) ? generateRows(absenceState.items, absenceState.numberOfRecords) : null}
       </TableBody>
     </Table>
   </Card>

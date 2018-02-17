@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { map, path, length, max, reduce, append, repeat, unnest, prop, addIndex, takeLast, lt, splitEvery } from 'ramda';
-import response from "../apiResponses/gradesResponse";
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { map, length, append, repeat, unnest, prop, addIndex, takeLast, lt, splitEvery } from 'ramda';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
 import {
     Table,
     TableBody,
@@ -150,7 +149,6 @@ class Grades extends Component {
                 <div style={{display: 'flex'}}>
                     <Toggle
                         label="Pololetí 1."
-                        style={styles.toggle}
                         trackSwitchedStyle={styles.trackSwitched}
                         thumbSwitchedStyle={styles.thumbSwitched}
                         style={styles.periodSwitch}
@@ -158,7 +156,7 @@ class Grades extends Component {
                         onToggle={this.props.handlePeriodChange}
                     />
                     <span>2.</span>
-                    { this.props.absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
+                    { fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
                 </div>
                 {render(response)}
             </div>
