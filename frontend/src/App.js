@@ -12,7 +12,7 @@ class App extends Component {
     this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: 'Bez připojení k internetu', errorOpen: true } })
   }
   _closeError = () => {
-    this.setState({ errorState: { errorOpen: false }});
+    this.setState({ errorState: { errorOpen: false } });
   }
   constructor(props) {
     super(props);
@@ -27,15 +27,18 @@ class App extends Component {
         userName,
         loginMessage,
         errorState: {
-
+          fetchErrorMsg: 'Bez připojení k internetu',
+          errorOpen: false
         }
       }
     } else {
       this.state = {
         logged: false,
         errorState: {
-
-        }
+          fetchErrorMsg: 'Bez připojení k internetu',
+          errorOpen: false,
+        },
+        logInProggres: false,
       }
     }
     this.apiHandler = new ApiHandler(this._apiErrorCallback);
@@ -74,7 +77,7 @@ class App extends Component {
         handleLogOut={this._handleLogOut}
         cid={this.state.cid}
         userName={this.state.userName}
-        class={this.state.loginMessage.split(' ')[2]}
+        class={this.state.loginMessage ? this.state.loginMessage.split(' ')[2] : ''}
       /> :
       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} logError={this.state.logError} />;
 
@@ -82,14 +85,16 @@ class App extends Component {
 
     return (
       <MuiThemeProvider>
-        {this._renderContent()}
-        <Snackbar
-          open={this.state.errorState.errorOpen}
-          message={this.state.errorState.fetchErrorMsg}
-          autoHideDuration={3000}
-          action='Zavřít'
-          onActionClick={this._closeError}
-        />
+        <div>
+          {this._renderContent()}
+          <Snackbar
+            open={this.state.errorState.errorOpen}
+            message={this.state.errorState.fetchErrorMsg}
+            autoHideDuration={3000}
+            action='Zavřít'
+            onActionClick={this._closeError}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }

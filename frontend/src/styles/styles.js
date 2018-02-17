@@ -22,8 +22,11 @@ export const styles = {
         padding: "30px 10px 40px 10px",
         textAlign: 'center',
     },
-    loginCardActions: {
-        textAlign: 'center',
+    loginButton: {
+        width: '140px',
+    },
+    loginButtonLabel: {
+        padding: '0px 0px 0px 0px',
     },
     absenceCard: {
         padding: '20px'

@@ -54,17 +54,18 @@ const Logged = (props) => {
 Logged.muiName = 'IconMenu';
 
 class Main extends Component {
-    _apiErrorCallback = (e) => {
-        this.setState({ errorState: { fetchError: e.message,fetchErrorMsg:'Bez připojení k internetu', errorOpen: true } })
-    }
-    _closeError=()=>{
-        this.setState({ errorState: { errorOpen: false }});     
-    }
     constructor(props) {
         super(props);
-        this.state = mainDefaultState;
+        console.log('seassion', sessionStorage.getItem('absenceState'))
+        this.state = mainDefaultState(sessionStorage.getItem('absenceState'), sessionStorage.getItem('classificationState'));
         this.apiHandler = new ApiHandler(this._apiErrorCallback);
         this._lazyLoadContent();
+    }
+    _apiErrorCallback = (e) => {
+        this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: 'Bez připojení k internetu', errorOpen: true } })
+    }
+    _closeError = () => {
+        this.setState({ errorState: { errorOpen: false } });
     }
     _lazyLoadContent = () => {
         this.apiHandler.rightsAbsence(this.props.cid).then(() => this._loadDefAbsence());
@@ -91,6 +92,7 @@ class Main extends Component {
                     classificationState: newClassificationState,
                 })
                 this._handleFetchingData('classificationState', false)
+                sessionStorage.setItem('classificationState', newClassificationState);
             })
 
     }
@@ -99,23 +101,29 @@ class Main extends Component {
 
         this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
             .then((absenceResp) => {
-                const numberOfWeekBefore = absenceResp.total - 1;
-                this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
-                    .then((absenceResp2) => {
-                        const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
+                if (!absenceResp.error) {
+                    console.log('resp', absenceResp)
+                    const numberOfWeekBefore = absenceResp.total - 1;
+                    this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
+                        .then((absenceResp2) => {
+                            const absenceRespMerged = deepmerge(absenceResp2, absenceResp);
 
-                        const newAbsenceState = this.state.absenceState;
-                        newAbsenceState.items = [];
-                        const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items, numberOfRecords: 10 })
+                            const newAbsenceState = this.state.absenceState;
+                            newAbsenceState.items = [];
+                            const newAbsenceState2 = deepmerge(newAbsenceState, { currentWeek: numberOfWeekBefore, totalWeek: absenceRespMerged.total, items: absenceRespMerged.items, numberOfRecords: 10 })
 
-                        this.setState({
-                            absenceState: newAbsenceState2,
+                            this.setState({
+                                absenceState: newAbsenceState2,
+                            })
+
+                            this._handleFetchingData('absenceState', false)
+                            sessionStorage.setItem('absenceState', newAbsenceState2);
+
                         })
+                }else {
+                    this._handleFetchingData('absenceState', false)
+                }
 
-                        this._handleFetchingData('absenceState', false)
-
-
-                    })
 
             })
 
@@ -152,9 +160,10 @@ class Main extends Component {
                 this.setState({ absenceState: absenceState })
 
                 this._handleFetchingData('absenceState', false)
+                sessionStorage.setItem('absenceState', absenceState);
 
             })
-            .catch((e) => this._handleFetchingData('absenceState', false))
+                .catch((e) => this._handleFetchingData('absenceState', false))
         } else {
             const newAbsenceState = this.state.absenceState;
 

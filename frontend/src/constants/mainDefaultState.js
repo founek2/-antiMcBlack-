@@ -1,10 +1,10 @@
-export default {
+export default (absenceState, classificationState) => ({
       open: false,
       activeComponent: 'default',
       menuItemsStyles: {},
       openDialogPassword: false,
       errorState: {},
-      absenceState: {
+      absenceState: absenceState ? absenceState : {
           numberOfRecords: 10,
           currentWeek: 0,
           totalWeek: 0,
@@ -12,7 +12,7 @@ export default {
           period: 2,
           fetchingData: false,
       },
-      classificationState: {
+      classificationState: classificationState ? classificationState : {
           period: 2,
           fetchingData: false,
       },
@@ -37,4 +37,4 @@ export default {
               errorMessage: 'Zadané heslo není správné'
           }
       }
-  };
+  });

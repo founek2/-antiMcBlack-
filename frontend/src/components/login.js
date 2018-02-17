@@ -5,7 +5,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { styles } from '../styles/styles'
 import { pink500 } from 'material-ui/styles/colors';
 import { path, assocPath } from 'ramda';
-import CircularProgress from 'material-ui/CircularProgress';
 
 const getNameFromEvent = path(['target', 'name'])
 const getValueFromEvent = path(['target', 'value'])
@@ -49,6 +48,7 @@ class Login extends Component {
     }
 
     render() {
+        console.log('login render')
         return (
             <div >
                 <Card className='loginCard'>
@@ -81,11 +81,13 @@ class Login extends Component {
                             errorText={(!path(['inputs','password', 'valid'],this.state) && path(['inputs','password', 'errorMessage'],this.state)) || this.props.logError}
                             />
                     </CardText>
-                    <CardActions style={styles.loginCardActions}>
+                    <CardActions>
                         <RaisedButton 
                             label="Login" 
                             onClick={this._handleLogin}
-                            icon={<CircularProgress size={25} thickness={3} style={!this.props.logInProggres ? {display: 'none'} : {}}/>}
+                            icon={this.props.logInProggres ? <div className='loader-5 center'><span></span></div> : null}
+                            style={styles.loginButton}
+                            labelStyle={styles.loginButtonLabel}
                          />
                     </CardActions>
                 </Card>

@@ -16,7 +16,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
 
@@ -34,7 +34,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
 
 
         //  return await response.ok ? result.json() : toogleError()
@@ -53,7 +53,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
 
@@ -70,7 +70,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
 
@@ -87,7 +87,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
         // const data = await response.json();
         // return await data.response;
@@ -106,7 +106,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
 
@@ -123,7 +123,7 @@ export default class Api {
             .then(status)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e))
+            .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
 }
