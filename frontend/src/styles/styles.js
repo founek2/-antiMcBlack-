@@ -1,4 +1,5 @@
 import { red900, purple600, pink500, pink300, pink100 } from 'material-ui/styles/colors';
+import { relative } from 'path';
 
 export const styles = {
     errorStyle: {
@@ -74,6 +75,9 @@ export const styles = {
     absenceTop: {
         display: 'flex',
         justifyContent: 'space-between',
+    },
+    absencePeriodSwitchContainer: {
+        position: 'relative',
     },
     passwordDialog: {
         textAlign: 'center',

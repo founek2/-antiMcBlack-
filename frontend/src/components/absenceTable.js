@@ -14,13 +14,13 @@ import mapIndexed from '../utils/mapIndex';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Card } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-import CircularProgress from 'material-ui/CircularProgress';
+
 const mobileView = () => lt(window.innerWidth, 580)
 
 const generateHeaderRow = (headerArray) => (
   <TableRow >
     {mapIndexed((item, idx) =>
-      <TableHeaderColumn key={idx} style={styles.tableRowColumme} className={idx===0?'tableHeaderColumnFirst':null}>{item}</TableHeaderColumn>, headerArray)}
+      <TableHeaderColumn key={idx} style={styles.tableRowColumme} className={idx === 0 ? 'tableHeaderColumnFirst' : null}>{item}</TableHeaderColumn>, headerArray)}
   </TableRow >
 );
 
@@ -48,7 +48,7 @@ const AbsenceTable = (props) => (
           onToggle={props.handlePeriodChange}
         />
         <span>2.</span>
-        <CircularProgress size={25} thickness={3} style={!props.absenceState.fetchingData ? {display: 'none'} : {}}/>
+       { props.absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
       </div>
       <RadioButtonGroup
         style={styles.absenceRadioButtonGroup}
@@ -72,12 +72,12 @@ const AbsenceTable = (props) => (
           label="20"
           style={styles.radioButton}
         />
-         <RadioButton
+        <RadioButton
           value={50}
           label="50"
           style={styles.radioButton}
         />
-                <RadioButton
+        <RadioButton
           value={1000}
           label="vše"
           style={{ ...styles.radioButton, float: 'none' }}

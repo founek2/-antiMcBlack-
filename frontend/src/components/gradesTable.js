@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { map, path, length, max, reduce, append, repeat, unnest, prop, addIndex, takeLast, lt, splitEvery } from 'ramda';
 import response from "../apiResponses/gradesResponse";
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
 import {
     Table,
     TableBody,
@@ -159,7 +158,7 @@ class Grades extends Component {
                         onToggle={this.props.handlePeriodChange}
                     />
                     <span>2.</span>
-                    <CircularProgress size={25} thickness={3} style={!fetchingData ? {display: 'none'} : {}}/>
+                    { this.props.absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
                 </div>
                 {render(response)}
             </div>
