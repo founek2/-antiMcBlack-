@@ -104,7 +104,7 @@ class Main extends Component {
         this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
             .then((absenceResp) => {
                 if (!absenceResp.error) {
-                    console.log('resp', absenceResp)
+
                     const numberOfWeekBefore = absenceResp.total - 1;
                     this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, numberOfWeekBefore)
                         .then((absenceResp2) => {

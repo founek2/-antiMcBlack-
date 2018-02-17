@@ -48,7 +48,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log('login render')
         return (
             <div >
                 <Card className='loginCard'>

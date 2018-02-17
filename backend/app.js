@@ -25,16 +25,19 @@ app.set('view engine', 'jade');
 
 app.use(compression());
 /** nastavení bezpečnostních hlaviček **/
- app.use(helmet.contentSecurityPolicy({
-    directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'"]
-    }
-}));
-app.use(helmet.referrerPolicy({ policy: 'origin' }));
+
 
 process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
-process.env.NODE_ENV === 'production' && app.use(helmet());
+//process.env.NODE_ENV === 'production' && app.use(helmet());
+
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'", 'skalicky-vps.spse-net.cz'],
+    scriptSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+  }
+}));
+app.use(helmet.referrerPolicy({ policy: 'origin' }));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
