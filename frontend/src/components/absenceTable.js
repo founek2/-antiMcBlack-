@@ -94,7 +94,7 @@ const AbsenceTable = (props) => (
       <TableBody
         displayRowCheckbox={false}
       >
-        {props.absenceState.items && props.absenceState.items.lenght > 0 ? generateRows(props.absenceState.items, props.absenceState.numberOfRecords) : null}
+        {(props.absenceState.items && props.absenceState.items.length > 0) ? generateRows(props.absenceState.items, props.absenceState.numberOfRecords) : null}
       </TableBody>
     </Table>
   </Card>

@@ -56,10 +56,12 @@ Logged.muiName = 'IconMenu';
 class Main extends Component {
     constructor(props) {
         super(props);
-        console.log('seassion', sessionStorage.getItem('absenceState'))
-        this.state = mainDefaultState(sessionStorage.getItem('absenceState'), sessionStorage.getItem('classificationState'));
+        const absenceState = JSON.parse(sessionStorage.getItem('absenceState'));
+        const classificationState = JSON.parse(sessionStorage.getItem('classificationState'));
+        this.state = mainDefaultState(absenceState, classificationState);
         this.apiHandler = new ApiHandler(this._apiErrorCallback);
-        this._lazyLoadContent();
+        
+        this._lazyLoadContent(absenceState, classificationState);
     }
     _apiErrorCallback = (e) => {
         this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: 'Bez připojení k internetu', errorOpen: true } })
@@ -67,10 +69,10 @@ class Main extends Component {
     _closeError = () => {
         this.setState({ errorState: { errorOpen: false } });
     }
-    _lazyLoadContent = () => {
-        this.apiHandler.rightsAbsence(this.props.cid).then(() => this._loadDefAbsence());
+    _lazyLoadContent = (abs, clas) => {
+        this.apiHandler.rightsAbsence(this.props.cid).then(() => !abs && this._loadDefAbsence());
 
-        this.apiHandler.rightsClassification(this.props.cid).then(() => this._loadClassification());
+        this.apiHandler.rightsClassification(this.props.cid).then(() => !clas && this._loadClassification());
     }
     _handleFetchingData = (path, value) => {
 
@@ -92,7 +94,7 @@ class Main extends Component {
                     classificationState: newClassificationState,
                 })
                 this._handleFetchingData('classificationState', false)
-                sessionStorage.setItem('classificationState', newClassificationState);
+                sessionStorage.setItem('classificationState', JSON.stringify(this.state.classificationState));
             })
 
     }
@@ -117,7 +119,7 @@ class Main extends Component {
                             })
 
                             this._handleFetchingData('absenceState', false)
-                            sessionStorage.setItem('absenceState', newAbsenceState2);
+                            sessionStorage.setItem('absenceState', JSON.stringify(this.state.absenceState));
 
                         })
                 }else {
