@@ -3,6 +3,8 @@ export default (absenceState, classificationState) => ({
       activeComponent: 'default',
       menuItemsStyles: {},
       openDialogPassword: false,
+      rightsClassification: false,
+      rightsAbsence: false,
       errorState: {
             errorOpen: false,
             fetchErrorMsg: '',

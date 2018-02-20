@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import { styles } from '../styles/styles';
 import AbsenceTable from './absenceTable';
-import GradesTable from './gradesTable';
+import ClassificationTable from './classificationTable';
 import ApiHandler from '../api';
 import ClickOutside from 'react-click-outside';
 import Default from './default';
@@ -29,7 +29,7 @@ const setInput = (name, value) => (state, props) => assocPath(['inputs', name, '
 const menuComponents = {
     default: () => <Default />,
     absence: (props) => <AbsenceTable {...props.absence} />,
-    classification: (props) => <GradesTable {...props.classification} />,
+    classification: (props) => <ClassificationTable {...props.classification} />,
     timeTable: (props) => <TimeTable {...props.timeTable} />,
     files: 'Soubory (in far future)'
 };
@@ -70,9 +70,18 @@ class Main extends Component {
         this.setState({ errorState: { errorOpen: false } });
     }
     _lazyLoadContent = (abs, clas) => {
-        this.apiHandler.rightsAbsence(this.props.cid).then(() => !abs && this._loadDefAbsence());
+        if(!this.state.rightsAbsence && !abs) this.apiHandler.rightsAbsence(this.props.cid).then(() => {
+            this.setState({rightsAbsence: true})
+            this._loadDefAbsence()
+        });
 
-        this.apiHandler.rightsClassification(this.props.cid).then(() => !clas && this._loadClassification());
+        !abs && this._loadDefAbsence()
+
+        if(!this.state.rightsClassification && !clas) this.apiHandler.rightsClassification(this.props.cid).then(() => {
+            this.setState({rightsClassification: true})
+            this._loadClassification()
+        });
+        !clas && this._loadClassification()
     }
     _handleFetchingData = (path, value) => {
 
@@ -82,10 +91,15 @@ class Main extends Component {
     }
 
     _loadClassification = () => {
-
         this._handleFetchingData('classificationState', true)
-
-        this.apiHandler.getClassification(this.props.cid, this.state.classificationState.period)
+        let promise;
+        if(!this.state.rightsClassification){
+            promise = this.apiHandler.rightsClassification(this.props.cid).then(() => this.setState({rightsClassification: true}))
+        }else {
+            promise = new Promise((resolve) => resolve())
+        }
+        
+        promise.then(() => this.apiHandler.getClassification(this.props.cid, this.state.classificationState.period)
             .then((classificationResp) => {
                 const newClassificationState = this.state.classificationState;
                 newClassificationState.response = classificationResp;
@@ -96,12 +110,18 @@ class Main extends Component {
                 this._handleFetchingData('classificationState', false)
                 sessionStorage.setItem('classificationState', JSON.stringify(this.state.classificationState));
             })
+        );
 
     }
     _loadDefAbsence = () => {
         this._handleFetchingData('absenceState', true)
-
-        this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
+        let promise;
+        if(!this.state.rightsAbsence){
+            promise = this.apiHandler.rightsAbsence(this.props.cid).then(() => this.setState({rightsAbsence: true}))
+        }else {
+            promise = new Promise((resolve) => resolve())
+        }
+        promise.then(() => this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, 0)
             .then((absenceResp) => {
                 if (!absenceResp.error) {
 
@@ -128,6 +148,7 @@ class Main extends Component {
 
 
             })
+        );
 
     }
     _handleNumberOfAbsenceRecords = (e, value) => {
@@ -142,7 +163,13 @@ class Main extends Component {
         if (value > numberOfRecords && currentWeek > 1) {
             const a = value / 5;
             const arrayOfPromises = [];
-
+            let promise;
+            if(!this.state.rightsAbsence){
+                promise = this.apiHandler.rightsAbsence(this.props.cid);
+            }else {
+                promise = new Promise((resolve) => resolve())
+            }
+            promise.then(() =>{
             for (let i = currentWeek - 1; i >= 1 && (currentWeek - i) !== a; i--) {
                 arrayOfPromises.push(this.apiHandler.getAbsence(this.props.cid, this.state.absenceState.period, i))
                 newCurrentWeek = i;
@@ -164,8 +191,9 @@ class Main extends Component {
                 this._handleFetchingData('absenceState', false)
                 sessionStorage.setItem('absenceState', absenceState);
 
-            })
-                .catch((e) => this._handleFetchingData('absenceState', false))
+            }).catch((e) => this._handleFetchingData('absenceState', false))
+        })
+                
         } else {
             const newAbsenceState = this.state.absenceState;
 
