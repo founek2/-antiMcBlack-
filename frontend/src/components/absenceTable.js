@@ -14,6 +14,8 @@ import mapIndexed from '../utils/mapIndex';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Card } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 
 const generateHeaderRow = (headerArray) => (
   <TableRow >
@@ -81,6 +83,17 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
           style={{ ...styles.radioButton, float: 'none' }}
         />
       </RadioButtonGroup>
+      <SelectField
+          floatingLabelText="Počet dnů"
+          onChange={handleNumberOfRecords}
+          value={absenceState.numberOfRecords}
+        >
+          <MenuItem value={5} primaryText="5" />
+          <MenuItem value={10} primaryText="10" />
+          <MenuItem value={20} primaryText="20" />
+          <MenuItem value={50} primaryText="50" />
+          <MenuItem value={1000} primaryText="vše" />
+        </SelectField>
     </div>
     <Table style={styles.absenceTableHeaderRow} selectable={false}>
       <TableHeader

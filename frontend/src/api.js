@@ -1,6 +1,7 @@
 import encodeToken from './utils/encodeToken';
 import { curry } from 'ramda';
 
+const customError = {message: {mess: 'Bez připojení k internetu', time: 3000}}
 const intranetApiUrl = '/intranet/api';
 export default class Api {
     constructor(errorHandler, logOut) {
@@ -18,8 +19,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 
     rightsAbsence = (cid) => {
@@ -36,10 +36,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-
-
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
 
     }
     getAbsence = (cid, period, week) => {
@@ -55,8 +52,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 
     rightsClassification = (cid) => {
@@ -72,8 +68,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then(this.checkResponse)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 
     getClassification = (cid, period, week) => {
@@ -89,10 +84,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
-        // const data = await response.json();
-        // return await data.response;
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 
     changePassword = (cid, userName, password) => {
@@ -108,8 +100,7 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 
     logOut = (cid) => {
@@ -125,14 +116,15 @@ export default class Api {
             .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
-            .catch((e) => this.errorHandler(e) || {error: true})
-        //  return await response.ok ? result.json() : toogleError()
+            .catch((e) => this.errorHandler(customError) || {error: true})
     }
 }
 
 const checkStatus = (res) => {
-    if (!res.ok) {
-        throw new Error(res.statusText);
+    if (res.status === 403) {
+        throw new Error({mess: 'Černoch zablokoval náš backend :(', time: 99999999});
+    }else if (!res.ok) {
+        throw new Error({mess: 'Bez připojení k internetu', time: 3000});
     }
     return res;
 }
@@ -140,7 +132,7 @@ const checkStatus = (res) => {
 const checkResponse = (logOut, errorHandler, json) => {
     if (json.status === 'critical') {
         logOut();
-        errorHandler(new Error(json.response), 'Platnost tokenu vypršela');
+        errorHandler(new Error({mess: 'Platnost tokenu vypršela', time: 3000}), 'Platnost tokenu vypršela');
     }
     return json.response;
 }

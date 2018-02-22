@@ -178,9 +178,11 @@ class Main extends Component {
         })
     );
   };
-  _handleNumberOfAbsenceRecords = (e, value) => {
+  _handleNumberOfAbsenceRecords = (e, val, payload) => {
+
     this._handleFetchingData("absenceState", true);
 
+    const value = payload ? payload : val;
     let newCurrentWeek = this.state.absenceState.currentWeek;
     const { numberOfRecords, currentWeek } = this.state.absenceState;
 
@@ -217,7 +219,7 @@ class Main extends Component {
             this.setState({ absenceState: absenceState });
 
             this._handleFetchingData("absenceState", false);
-            sessionStorage.setItem("absenceState", absenceState);
+            sessionStorage.setItem("absenceState", JSON.stringify(absenceState));
           })
           .catch(e => this._handleFetchingData("absenceState", false));
       });
@@ -230,14 +232,6 @@ class Main extends Component {
       });
       this._handleFetchingData("absenceState", false);
     }
-
-    //TODO přepsat manipulaci s objektem
-    /*      let newAbsenceState = this.state.absenceState;
-              newAbsenceState.items = itemsNew;
-              newAbsenceState.numberOfRecords = value;
-              newAbsenceState.currentWeek = newCurrentWeek;
-              this.setState({ absenceState: newAbsenceState })
-              this._handleFetchingData('absenceState', false)*/
   };
   handleClickOutside() {
     this._handleESC();

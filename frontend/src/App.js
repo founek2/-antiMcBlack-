@@ -8,8 +8,9 @@ import ApiHandler from './api';
 import { path } from 'ramda';
 
 class App extends Component {
-  _apiErrorCallback = (e , message) => {
-    this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: message ? message  : 'Bez připojení k internetu', errorOpen: true } })
+  _apiErrorCallback = (e) => {
+    console.log(e)
+    this.setState({ errorState: { fetchErrorMsg: e.message.mess, errorOpen: true, autoHideDuration: e.message.time } })
   }
   _closeError = () => {
     this.setState({ errorState: { errorOpen: false } });
@@ -28,7 +29,8 @@ class App extends Component {
         loginMessage,
         errorState: {
           fetchErrorMsg: 'Bez připojení k internetu',
-          errorOpen: false
+          errorOpen: false,
+          autoHideDuration: 3000,
         }
       }
     } else {
@@ -37,6 +39,7 @@ class App extends Component {
         errorState: {
           fetchErrorMsg: 'Bez připojení k internetu',
           errorOpen: false,
+          autoHideDuration: 3000,
         },
         logInProggres: false,
       }
@@ -91,7 +94,7 @@ class App extends Component {
           <Snackbar
             open={this.state.errorState.errorOpen}
             message={this.state.errorState.fetchErrorMsg}
-            autoHideDuration={3000}
+            autoHideDuration={this.state.errorState.autoHideDuration}
             action='Zavřít'
             onActionClick={this._closeError}
           />
