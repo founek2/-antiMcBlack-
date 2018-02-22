@@ -21,7 +21,7 @@ var handleSendReq = function() {
 setInterval(handleSendReq, 250);
 
 router.post("/api", function(req, res, next) {
-  if (false) {
+  if (true) {
     req.headers.host = "api.spse.cz";
     req.headers.origin = "https://i3.spse.cz";
     req.headers.referer = "https://i3.spse.cz/";
