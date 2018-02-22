@@ -8,8 +8,8 @@ import ApiHandler from './api';
 import { path } from 'ramda';
 
 class App extends Component {
-  _apiErrorCallback = (e) => {
-    this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: 'Bez připojení k internetu', errorOpen: true } })
+  _apiErrorCallback = (e , message) => {
+    this.setState({ errorState: { fetchError: e.message, fetchErrorMsg: message ? message  : 'Bez připojení k internetu', errorOpen: true } })
   }
   _closeError = () => {
     this.setState({ errorState: { errorOpen: false } });

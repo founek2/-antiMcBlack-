@@ -3,9 +3,9 @@ import { curry } from 'ramda';
 
 const intranetApiUrl = '/intranet/api';
 export default class Api {
-    constructor(errorHandler, logInAgain) {
+    constructor(errorHandler, logOut) {
         this.errorHandler = errorHandler;
-        this.checkResponse = curriedCheckResponse(logInAgain, errorHandler);
+        this.checkResponse = curriedCheckResponse(logOut, errorHandler);
     }
 
     logIn = (userName, password) => {
@@ -137,10 +137,10 @@ const checkStatus = (res) => {
     return res;
 }
 
-const checkResponse = (logInAgain, errorHandler, json) => {
+const checkResponse = (logOut, errorHandler, json) => {
     if (json.status === 'critical') {
-        logInAgain();
-        errorHandler(new Error({message: 'Platnost tokenu vypršela'}))
+        logOut();
+        errorHandler(new Error(json.response), 'Platnost tokenu vypršela');
     }
     return json.response;
 }

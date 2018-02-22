@@ -21,7 +21,6 @@ var handleSendReq = function() {
 setInterval(handleSendReq, 250);
 
 router.post("/api", function(req, res, next) {
-  if (true) {
     req.headers.host = "api.spse.cz";
     req.headers.origin = "https://i3.spse.cz";
     req.headers.referer = "https://i3.spse.cz/";
@@ -34,9 +33,6 @@ router.post("/api", function(req, res, next) {
       });
 
     fetchesFront.push({ fetch: re, res: res });
-  } else {
-    res.send({ status: "critical", message: "pristup odepren" });
-  }
 });
 
 router.get("/", function(req, res, next) {
