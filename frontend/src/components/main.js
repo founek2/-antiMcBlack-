@@ -243,13 +243,13 @@ class Main extends Component {
     this._handleESC();
   }
   _handleToggleDrawer = () => {
-    this.setState({ open: !this.state.open });
+    this.setState({ leftMenuOpen: !this.state.leftMenuOpen });
   };
-  _handleESC = () => (this.state.open ? this.setState({ open: false }) : null);
+  _handleESC = () => (this.state.leftMenuOpen ? this.setState({ leftMenuOpen: false }) : null);
   _handleItemSelect = (e, menuItem, i) => {
-    if (menuItem.props.value)
+    if (menuItem.props.value){
       this.setState({ activeComponent: menuItem.props.value });
-
+    }
     const menuItemsStyles = { [menuItem.props.value]: styles.menuItemFocused };
     this.setState({ menuItemsStyles });
   };
@@ -344,7 +344,7 @@ class Main extends Component {
             style={styles.appBar}
           />
           <Drawer
-            open={this.state.open}
+            open={this.state.leftMenuOpen}
             containerStyle={styles.drawerContainer}
           >
             <Menu

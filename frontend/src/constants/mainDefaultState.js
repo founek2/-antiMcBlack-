@@ -1,5 +1,5 @@
 export default (absenceState, classificationState) => ({
-      open: false,
+      leftMenuOpen: false,
       activeComponent: 'default',
       menuItemsStyles: {},
       openDialogPassword: false,
