@@ -78,6 +78,7 @@ class App extends Component {
         cid={this.state.cid}
         userName={this.state.userName}
         class={this.state.loginMessage ? this.state.loginMessage.split(' ')[2] : ''}
+        handleError={this._apiErrorCallback}
       /> :
       <Login handleLogin={this._handleLogin} logInProggres={this.state.logInProggres} logError={this.state.logError} />;
 

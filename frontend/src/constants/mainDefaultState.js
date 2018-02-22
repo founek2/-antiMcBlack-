@@ -5,10 +5,6 @@ export default (absenceState, classificationState) => ({
       openDialogPassword: false,
       rightsClassification: false,
       rightsAbsence: false,
-      errorState: {
-            errorOpen: false,
-            fetchErrorMsg: '',
-      },
       absenceState: absenceState ? absenceState : {
           numberOfRecords: 10,
           currentWeek: 0,

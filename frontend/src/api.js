@@ -1,9 +1,11 @@
 import encodeToken from './utils/encodeToken';
+import { curry } from 'ramda';
 
 const intranetApiUrl = '/intranet/api';
 export default class Api {
-    constructor(errorHandler) {
+    constructor(errorHandler, logInAgain) {
         this.errorHandler = errorHandler;
+        this.checkResponse = curriedCheckResponse(logInAgain, errorHandler);
     }
 
     logIn = (userName, password) => {
@@ -13,7 +15,7 @@ export default class Api {
                 'Content-Type': 'application/json',
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -31,7 +33,7 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -50,7 +52,7 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -67,9 +69,9 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
-            .then((json) => json.response)
+            .then(this.checkResponse)
             .catch((e) => this.errorHandler(e) || {error: true})
         //  return await response.ok ? result.json() : toogleError()
     }
@@ -84,7 +86,7 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -103,7 +105,7 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -120,7 +122,7 @@ export default class Api {
                 'x-cid': cid,
             }
         })
-            .then(status)
+            .then(checkStatus)
             .then((response) => response.json())
             .then((json) => json.response)
             .catch((e) => this.errorHandler(e) || {error: true})
@@ -128,9 +130,19 @@ export default class Api {
     }
 }
 
-function status(res) {
+const checkStatus = (res) => {
     if (!res.ok) {
         throw new Error(res.statusText);
     }
     return res;
 }
+
+const checkResponse = (logInAgain, errorHandler, json) => {
+    if (json.status === 'critical') {
+        logInAgain();
+        errorHandler(new Error({message: 'Platnost tokenu vypršela'}))
+    }
+    return json.response;
+}
+
+const curriedCheckResponse = curry(checkResponse);
