@@ -30,6 +30,13 @@ body {
   right: 0;
 
 }
+.numberOfRecordsRadio{
+  display: block;
+    padding-top: 1.5em;
+}
+.numberOfRecordsSelect{
+ display: none !important; 
+}
 /* Loader 5 */
 .loader-5 {
 	height: 32px;
@@ -190,6 +197,12 @@ body {
   }
   .subjectNameColumn{
     width: 2.5em !important;
+  }
+  .numberOfRecordsRadio{
+    display: none !important;
+  }
+  .numberOfRecordsSelect{
+   display: unset !important; 
   }
 }
 @media  screen and (min-height: 0px) {

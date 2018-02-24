@@ -17,6 +17,11 @@ export default (absenceState, classificationState) => ({
           period: 2,
           fetchingData: false,
       },
+      errorState:{
+        fetchError:'',
+        fetchErrorMsg:"",
+        errorOpen:false,
+      },
       inputs: {
           passwordNew: {
               value: '',

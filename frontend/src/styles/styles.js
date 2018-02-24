@@ -1,4 +1,4 @@
-import { red900, purple600, pink500, pink300, pink100 } from 'material-ui/styles/colors';
+import { red900, purple600, pink500, pink300, pink100, purple500, purple300, purple100 } from 'material-ui/styles/colors';
 
 export const styles = {
     errorStyle: {
@@ -65,8 +65,14 @@ export const styles = {
     thumbSwitched: {
         backgroundColor: pink300,
     },
+    track: {
+        backgroundColor: purple100,
+    },
+    thumb: {
+        backgroundColor: purple300,
+    },
     periodSwitch: {
-        width: '120px',
+        width: '60px',
         float: 'left',
         paddingRight: '13px',
         display: 'block',
@@ -74,9 +80,7 @@ export const styles = {
     absenceTop: {
         display: 'flex',
         justifyContent: 'space-between',
-    },
-    absencePeriodSwitchContainer: {
-        position: 'relative',
+        height: '3em'
     },
     passwordDialog: {
         textAlign: 'center',
@@ -90,19 +94,35 @@ export const styles = {
     },
     averageColumnHeader: {
         paddingRight: '8px',
+        width: '8em',
     },
     absenceColumnHeader: {
-        paddingRight: '0px'
+        paddingRight: '0px',
+        width: '6em',
     },
     mobile: {
         averageColumnHeader: {
             paddingLeft: '80px',
         }
     },
-    absenceTableHeaderRow:{
+    absenceTableHeaderRow: {
         width: '99%'
     },
     absenceRadioButtonGroup: {
         width: '370px',
-    }
+    },
+    absenceRadioButtonIcon: {
+        width: '10px',
+        height: '10px',
+    },
+    absencePeriodSwitchContainer: {
+        width:"100px",
+        paddingLeft:'10px',   
+        paddingTop: '0.8em',
+        title: {
+            width:"80px",
+            display:'block',
+            textAlign:'center'
+        },
+    },
 };

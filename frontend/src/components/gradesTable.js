@@ -119,7 +119,7 @@ class Grades extends Component {
     _renderForDesktop = (response) => {
         return (
             <div>
-                <Table selectable={false}>
+                <Table selectable={false} >
                     <TableHeader displaySelectAll={false}
                         adjustForCheckbox={false}>
                     </TableHeader>
@@ -146,7 +146,7 @@ class Grades extends Component {
         const render = isMobile ? this._renderForMobile : this._renderForDesktop
         return (
             <div>
-                <div style={styles.absenceTop}>
+                <div>
                     <div style={styles.absencePeriodSwitchContainer}>
                         <span style={styles.absencePeriodSwitchContainer.title}>Pololetí </span>
                         <Toggle
@@ -156,8 +156,8 @@ class Grades extends Component {
                             trackStyle={styles.track}
                             thumbStyle={styles.thumb}
                             style={styles.periodSwitch}
-                            toggled={period === 2 ? true : false}
-                            onToggle={this.props.handlePeriodChange}
+                            toggled={props.absenceState.period === 2 ? true : false}
+                            onToggle={props.handlePeriodChange}
                         />
                         <span style={{ paddingRight: '10px' }}>2.</span>
                     </div>

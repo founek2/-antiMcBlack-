@@ -7,7 +7,7 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice } from 'ramda';
+import { insert, merge, reverse, slice, lt } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
 import mapIndexed from '../utils/mapIndex';
@@ -39,16 +39,19 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
   <Card >
     <div style={styles.absenceTop}>
       <div style={styles.absencePeriodSwitchContainer}>
+        <span style={styles.absencePeriodSwitchContainer.title}>Pololetí </span>
         <Toggle
-          label="Pololetí 1."
+          label="1."
           trackSwitchedStyle={styles.trackSwitched}
           thumbSwitchedStyle={styles.thumbSwitched}
+          trackStyle={styles.track}
+          thumbStyle={styles.thumb}
           style={styles.periodSwitch}
           toggled={absenceState.period === 2 ? true : false}
           onToggle={handlePeriodChange}
         />
-        <span>2.</span>
-       { absenceState.fetchingData ? <div className='loader-5 center' style={{left: '160px'}}><span></span></div> : null}
+        <span style={{paddingRight:'10px'}}>2.</span>
+        {absenceState.fetchingData ? <div className='loader-5 center' style={{ left: '160px' }}><span></span></div> : null}
       </div>
       <RadioButtonGroup
         style={styles.absenceRadioButtonGroup}
@@ -56,6 +59,8 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
         labelPosition='right'
         onChange={handleNumberOfRecords}
         valueSelected={absenceState.numberOfRecords}
+        iconStyle={styles.absenceRadioButtonIcon}
+        className="numberOfRecordsRadio"
       >
         <RadioButton
           value={5}
@@ -87,6 +92,7 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
           floatingLabelText="Počet dnů"
           onChange={handleNumberOfRecords}
           value={absenceState.numberOfRecords}
+          className="numberOfRecordsSelect"
         >
           <MenuItem value={5} primaryText="5" />
           <MenuItem value={10} primaryText="10" />
