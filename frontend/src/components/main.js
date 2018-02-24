@@ -12,7 +12,7 @@ import ClassificationTable from "./classificationTable";
 import ApiHandler from "../api";
 import ClickOutside from "react-click-outside";
 import Default from "./default";
-import { path, concat, assocPath, map, flatten } from "ramda";
+import { path, concat, assocPath, map, flatten, reverse } from "ramda";
 import deepmerge from "deepmerge";
 import Dialog from "material-ui/Dialog";
 import TextField from "material-ui/TextField";
@@ -209,8 +209,9 @@ class Main extends Component {
         }
         Promise.all(arrayOfPromises)
           .then(arrayResults => {
+            const newArrayResults = reverse(arrayResults);
             const absenceState = this.state.absenceState;
-            const resItems = map(object => object.items, arrayResults);
+            const resItems = map(object => object.items, newArrayResults);
             const newItems = concat(flatten(resItems), absenceState.items);
 
             absenceState.numberOfRecords = value;

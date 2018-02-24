@@ -146,7 +146,7 @@ class Grades extends Component {
         const render = isMobile ? this._renderForMobile : this._renderForDesktop
         return (
             <div>
-                <div style={styles.absenceTop}>
+                <div style={styles.classificationTop}>
                     <div style={styles.absencePeriodSwitchContainer}>
                         <span style={styles.absencePeriodSwitchContainer.title}>Pololetí </span>
                         <Toggle
@@ -161,7 +161,7 @@ class Grades extends Component {
                         />
                         <span style={{ paddingRight: '10px' }}>2.</span>
                     </div>
-                    {fetchingData ? <div className='loader-5 center' style={{ left: '160px' }}><span></span></div> : null}
+                    {fetchingData ? <div className='loader-5' style={{ marginTop: '20px' }}><span></span></div> : null}
                 </div>
                 {render(response)}
             </div >

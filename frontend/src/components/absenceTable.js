@@ -59,8 +59,9 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
           onToggle={handlePeriodChange}
         />
         <span style={{paddingRight:'10px'}}>2.</span>
-        {absenceState.fetchingData ? <div className='loader-5 center' style={{ left: '160px' }}><span></span></div> : null}
+        
       </div>
+      {absenceState.fetchingData ? <div className='loader-5' style={{ marginTop: '20px' }}><span></span></div> : null}
       <RadioButtonGroup
         style={styles.absenceRadioButtonGroup}
         name="numberOfRecords"
