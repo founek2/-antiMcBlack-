@@ -17,6 +17,14 @@ import Toggle from 'material-ui/Toggle';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
+const types = [
+  0, // 0 normální hodina
+  1, // 1 nová absence
+  2, // 2 omluvená rodiné důvody
+  3, // 3 dřívější odchod ????
+  4, // 4 pozdní příchod
+  5, // 5 školní akce
+]
 const generateHeaderRow = (headerArray) => (
   <TableRow >
     {mapIndexed((item, idx) =>
@@ -33,7 +41,7 @@ const generateColumns = (items, idx) => {
   return (<TableRow key={idx} >{columnsWithFirst}</TableRow>);
 }
 
-const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles['tableRowColummeKind' + item.kind], styles.tableRowColumme)} className='tableRowColumn'>{item.value}</TableRowColumn>);
+const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles.absenceKinds[item.kind], styles.tableRowColumme)} className='tableRowColumn' data-tooltip={item.comment[2]}>{item.value}</TableRowColumn>);
 
 const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords}) => (
   <Card >
@@ -93,6 +101,7 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
           onChange={handleNumberOfRecords}
           value={absenceState.numberOfRecords}
           className="numberOfRecordsSelect"
+          style={{width: '100px'}}
         >
           <MenuItem value={5} primaryText="5" />
           <MenuItem value={10} primaryText="10" />

@@ -34,7 +34,7 @@ const menuComponents = {
   files: "Soubory (in far future)"
 };
 
-const Logged = props => {
+const MenuItems = props => {
   return (
     <div>
       <IconMenu
@@ -54,8 +54,9 @@ const Logged = props => {
   );
 };
 
-Logged.muiName = "IconMenu";
+MenuItems.muiName = "IconMenu";
 
+var globalTimoutMenuItemSelect;
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -242,6 +243,8 @@ class Main extends Component {
   _handleESC = () => (this.state.leftMenuOpen ? this.setState({ leftMenuOpen: false }) : null);
   _handleItemSelect = (e, menuItem, i) => {
     if (menuItem.props.value){
+      clearTimeout(globalTimoutMenuItemSelect);
+      globalTimoutMenuItemSelect = setTimeout( () => this.setState({ leftMenuOpen: false }), 230);
       this.setState({ activeComponent: menuItem.props.value });
     }
     const menuItemsStyles = { [menuItem.props.value]: styles.menuItemFocused };
@@ -331,7 +334,7 @@ class Main extends Component {
           <AppBar
             title={"Intranet"}
             iconElementRight={
-              <Logged handleItemClick={this._handleRightMenuItemClick} />
+              <MenuItems handleItemClick={this._handleRightMenuItemClick} />
             }
             onLeftIconButtonClick={this._handleToggleDrawer}
             titleStyle={styles.appBarTitle}

@@ -50,7 +50,8 @@ var apiLimiter = new RateLimit({
   max: 100,
   delayMs: 0 // disabled
 });
-app.use('/api/', apiLimiter);
+app.use('/api', apiLimiter);
+app.use('/intranet/api', apiLimiter);
 app.use('/api', routeApi(new ServiceData()));
 app.use('/intranet', routeIntranet);
 app.use('/', routeIndex)
