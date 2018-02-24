@@ -4,7 +4,7 @@ import { curry } from 'ramda';
 const intranetApiUrl = '/intranet/api';
 export default class Api {
     constructor(errorHandler, logOut) {
-        this.checkResponse =  curriedCheckResponse(handeError);
+        this.checkResponse =  curriedCheckResponse(logOut, errorHandler);
         this.handleError = curriedHandleError(errorHandler)
     }
 

@@ -18,7 +18,7 @@ var handleSendReq = function() {
   }
 };
 
-setInterval(handleSendReq, 250);
+setInterval(handleSendReq, 300);
 
 router.post("/api", function(req, res, next) {
     req.headers.host = "api.spse.cz";
