@@ -12,7 +12,7 @@ var handleSendReq = function() {
       .fetch()
       .then(response => response.json())
       .then(json => item.res.send(JSON.stringify(json)))
-      .catch(e => item.res.status(403).send("forbidden"));
+      .catch(e => item.res.status(204).send({status: "forbidden"}));
     fetchesFront.splice(0, 1);
     console.log("handle");
   }

@@ -9,8 +9,9 @@ import { path } from 'ramda';
 
 class App extends Component {
   _apiErrorCallback = (e) => {
-    console.log(e)
-    this.setState({ errorState: { fetchErrorMsg: e.message.mess, errorOpen: true, autoHideDuration: e.message.time } })
+    let duration = 3000;
+    if(e.message === 'Černoch zablokoval náš server :\'(') duration = 999999;
+    this.setState({ errorState: { fetchErrorMsg: e.message, errorOpen: true, autoHideDuration: duration } })
   }
   _closeError = () => {
     this.setState({ errorState: { errorOpen: false } });
