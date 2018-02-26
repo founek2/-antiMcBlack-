@@ -120,6 +120,7 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
       </TableHeader>
       <TableBody
         displayRowCheckbox={false}
+        className="absenceTable"
       >
         {(absenceState.items && absenceState.items.length > 0) ? generateRows(absenceState.items, absenceState.numberOfRecords) : null}
       </TableBody>

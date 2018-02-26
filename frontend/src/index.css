@@ -9,9 +9,12 @@ body {
 #root {
   height: 100%;
 }
+#root > div{
+  height: 100%;
+}
 .loginCard {
   margin: auto;
-  width: 35%;
+  width: 470px;
   padding: 30px 10px 40px 10px;
   text-align: center;
 }
@@ -36,6 +39,9 @@ body {
 }
 .numberOfRecordsSelect{
  display: none !important; 
+}
+.absenceTable tr:nth-child(5n) {
+  border-bottom: 2.3px solid rgba(160, 160, 160, 0.66) !important;
 }
 /* Loader 5 */
 .loader-5 {

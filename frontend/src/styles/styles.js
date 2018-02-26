@@ -30,12 +30,6 @@ export const styles = {
       underlineFocusStyle: {
             //       borderColor: purple600,
       },
-      loginCard: {
-            margin: "auto",
-            width: "35%",
-            padding: "30px 10px 40px 10px",
-            textAlign: "center"
-      },
       loginButton: {
             width: "140px"
       },
@@ -46,16 +40,18 @@ export const styles = {
             padding: "20px"
       },
       absenceKinds: [
-            { backgroundColor: "inherit" },
-            { backgroundColor: pink400 },
-            { backgroundColor: green400 },
-            { backgroundColor: orange400 },
-            { backgroundColor: yellow400 },
-            { backgroundColor: lightBlue400 }
+            { backgroundColor: "inherit" }, // normánlí hodina
+            { backgroundColor: pink400 }, // nová absence
+            { backgroundColor: green400 }, // omluvená absence
+            { backgroundColor: orange400 }, //dřívější odchod
+            { backgroundColor: yellow400 }, // pozdní příchod
+            { backgroundColor: lightBlue400 } // školní akce
       ],
       drawerContainer: {
             position: "absolute",
-            marginTop: "64px"
+		marginTop: "64px",
+		overflow: 'hidden',
+		height: 'calc(100% - 64px)',
       },
       appBarTitle: {},
       appBar: {
@@ -63,14 +59,6 @@ export const styles = {
       },
       tableRowColumme: {
             textAlign: "center"
-      },
-      tableRowColummeKind1: {
-            //nová absence
-            backgroundColor: pink500
-      },
-      tableRowColummeKind2: {
-            //omluvená absence
-            backgroundColor: purple600
       },
       menuItemFocused: {
             backgroundColor: "rgba(0, 0, 0, 0.2)"
@@ -102,13 +90,18 @@ export const styles = {
             display: "flex",
             justifyContent: "space-between",
             height: "3em"
-      },
+	},
+	classificationTop: {
+		display: 'flex',
+		height: '3em',
+	},
       passwordDialog: {
             textAlign: "center"
       },
       timeTableIframe: {
             width: "100%",
-            height: "100%"
+		height: "calc(100% - 68px)",
+		border: 0,
       },
       gradesColumnHeader: {
             paddingLeft: "40%"

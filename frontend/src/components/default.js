@@ -15,7 +15,7 @@ class Default extends Component {
                              s využitím nových technologií. Frontend je napsaný v knihovně React s
                               využitím <a href='http://www.material-ui.com'>material-ui</a> komponent.</p>
                         <p>Nikdy nejsou ukládána uživatelská data na backendu. Requesty z frontendu se pouze přeposílají na api.spse.cz.</p>
-                        <p>Pomalá odezva je způsobena odesíláním requestů po určité době, protože Černoch má potřebu zablokovat vše co na něj pošle 10 requestů po sobě.</p>
+                        <p>Pomalá odezva je způsobena odesíláním requestů po určité době, protože p. Černoch má potřebu zablokovat vše co na něj pošle několik requestů rychle po sobě.</p>
                     </CardText>
                 </Card>
             </div >
