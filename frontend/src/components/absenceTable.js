@@ -87,15 +87,17 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
           style={styles.radioButton}
         />
         <RadioButton
-          value={50}
-          label="50"
+          value={30}
+          label="30"
           style={styles.radioButton}
         />
-        <RadioButton
+     <RadioButton
           value={1000}
           label="vše"
           style={{ ...styles.radioButton, float: 'none' }}
+          disabled
         />
+
       </RadioButtonGroup>
       <SelectField
           floatingLabelText="Počet dnů"
@@ -122,7 +124,7 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
         displayRowCheckbox={false}
         className="absenceTable"
       >
-        {(absenceState.items && absenceState.items.length > 0) ? generateRows(absenceState.items, absenceState.numberOfRecords) : null}
+        {(absenceState.items[absenceState.period] && absenceState.items[absenceState.period].length > 0) ? generateRows(absenceState.items[absenceState.period], absenceState.numberOfRecords) : null}
       </TableBody>
     </Table>
   </Card>

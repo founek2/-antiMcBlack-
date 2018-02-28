@@ -8,11 +8,7 @@ var helmet = require('helmet');
 var RateLimit = require('express-rate-limit');
 var compression = require('compression');
 
-var ServiceData = require("./bin/serviceData");
-var routeApi = require('./routes/api');
 var routeIndex = require('./routes/index');
-var routeIntranet = require('./routes/intranet');
-var forceSsl = require('force-ssl')
 
 var app = express();
 
@@ -27,14 +23,13 @@ app.use(compression());
 /** nastavení bezpečnostních hlaviček **/
 
 
-process.env.NODE_ENV === 'production' && app.use(forceSsl); /** přesměrování na https **/
 //process.env.NODE_ENV === 'production' && app.use(helmet());
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'", 'skalicky-vps.spse-net.cz'],
     scriptSrc: ["'self'"],
-    styleSrc: ["'self'", "'unsafe-inline'"],
+    styleSrc: ["'self'"],
   }
 }));
 app.use(helmet.referrerPolicy({ policy: 'origin' }));
@@ -50,10 +45,7 @@ var apiLimiter = new RateLimit({
   max: 100,
   delayMs: 0 // disabled
 });
-app.use('/api', apiLimiter);
-app.use('/intranet/api', apiLimiter);
-app.use('/api', routeApi(new ServiceData()));
-app.use('/intranet', routeIntranet);
+app.use('/', apiLimiter);
 app.use('/', routeIndex)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
