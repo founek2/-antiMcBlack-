@@ -8,13 +8,14 @@ var app = require('../app');
 var debug = require('debug')('newbackend:server');
 var http = require('http');
 var https = require('https');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort('8080');
-app.set('port', port);
+var port = normalizePort('8087');
+
 
 /**
  * Create HTTP server.
@@ -40,12 +41,12 @@ if (process.env.NODE_ENV === 'production') {
   };
   
   
-  var port = normalizePort('4430');
-  app.set('port', port);
-  var server = https.createServer(credentials, app);
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+
+  app.set('port', 4430);
+  var server2 = https.createServer(credentials, app);
+  server2.listen(4430);
+  server2.on('error', onError);
+  server2.on('listening', onListening);
 }
 
 /**

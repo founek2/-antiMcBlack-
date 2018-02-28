@@ -2,13 +2,15 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://skalicky-vps.spse-net.cz/intranet/",
   "dependencies": {
+    "deepmerge": "^2.0.1",
     "material-ui": "^0.20.0",
     "ramda": "^0.25.0",
     "react": "^16.2.0",
+    "react-click-outside": "github:tj/react-click-outside",
     "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
+    "react-outside-click": "^1.0.1",
     "react-scripts": "1.1.0",
     "typeface-roboto": "0.0.54"
   },
@@ -17,5 +19,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:8087/"
 }

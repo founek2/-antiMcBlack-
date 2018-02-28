@@ -4,15 +4,335 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
   height: inherit;
 }
 #root {
-  height: inherit;
+  height: 100%;
 }
-.drawerContainer {
-  height: inherit;
+#root > div{
+  height: 100%;
 }
-.drawerContainer > div{
-  height: inherit;
+.loginCard {
+  margin: auto;
+  width: 470px;
+  padding: 30px 10px 40px 10px;
+  text-align: center;
 }
+.defaultCard {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+}
+
+.center {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+}
+.numberOfRecordsRadio{
+  display: block;
+    padding-top: 1.5em;
+}
+.numberOfRecordsSelect{
+ display: none !important; 
+}
+.absenceTable tr:nth-child(5n) {
+  border-bottom: 2.3px solid rgba(160, 160, 160, 0.66) !important;
+}
+/* Loader 5 */
+.loader-5 {
+	height: 32px;
+  width: 32px;
+  top: 2px;
+	-webkit-animation: loader-5-1 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-5-1 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-5-1 {
+	0%   { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes loader-5-1 {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+.loader-5::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0; left: 0;
+	bottom: 0; right: auto;
+	margin: auto;
+	width: 8px;
+	height: 8px;
+	background: rgb(233, 30, 99);
+	border-radius: 50%;
+	-webkit-animation: loader-5-2 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-5-2 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-5-2 {
+	0%   { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+	50%  { -webkit-transform: translate3d(24px, 0, 0) scale(.5); }
+	100% { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes loader-5-2 {
+	0%   { transform: translate3d(0, 0, 0) scale(1); }
+	50%  { transform: translate3d(24px, 0, 0) scale(.5); }
+	100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.loader-5::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0; left: auto;
+	bottom: 0; right: 0;
+	margin: auto;
+	width: 8px;
+	height: 8px;
+	background: rgb(233, 30, 99);
+	border-radius: 50%;
+	-webkit-animation: loader-5-3 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-5-3 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-5-3 {
+	0%   { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+	50%  { -webkit-transform: translate3d(-24px, 0, 0) scale(.5); }
+	100% { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes loader-5-3 {
+	0%   { transform: translate3d(0, 0, 0) scale(1); }
+	50%  { transform: translate3d(-24px, 0, 0) scale(.5); }
+	100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.loader-5 span {
+	display: block;
+	position: absolute;
+	top: 0; left: 0;
+	bottom: 0; right: 0;
+	margin: auto;
+	height: 32px;
+	width: 32px;
+}
+.loader-5 span::before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0; left: 0;
+	bottom: auto; right: 0;
+	margin: auto;
+	width: 8px;
+	height: 8px;
+	background: rgb(233, 30, 99);
+	border-radius: 50%;
+	-webkit-animation: loader-5-4 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-5-4 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-5-4 {
+	0%   { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+	50%  { -webkit-transform: translate3d(0, 24px, 0) scale(.5); }
+	100% { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes loader-5-4 {
+	0%   { transform: translate3d(0, 0, 0) scale(1); }
+	50%  { transform: translate3d(0, 24px, 0) scale(.5); }
+	100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.loader-5 span::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: auto; left: 0;
+	bottom: 0; right: 0;
+	margin: auto;
+	width: 8px;
+	height: 8px;
+	background: rgb(233, 30, 99);
+	border-radius: 50%;
+	-webkit-animation: loader-5-5 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-5-5 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-5-5 {
+	0%   { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+	50%  { -webkit-transform: translate3d(0, -24px, 0) scale(.5); }
+	100% { -webkit-transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes loader-5-5 {
+	0%   { transform: translate3d(0, 0, 0) scale(1); }
+	50%  { transform: translate3d(0, -24px, 0) scale(.5); }
+	100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+@media screen and (max-width: 880px) {
+  .loginCard {
+    margin: auto;
+    width: 60%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
+}
+.gradesColumn{
+  width: 1em !important;
+  height:30px !important;
+}
+.subjectNameColumn{
+  width: 13em !important;
+  height:30px !important;
+}
+.tableRowColumn{
+  width: 2em !important;    
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  overflow: visible !important; 
+}
+.tableDateColumn{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  width: 2.5em;
+  overflow: visible !important;     
+}
+@media  screen and (max-width: 720px) {
+  .subjectNameColumn{
+    width: 10em !important;
+  }
+}
+@media  screen and (max-width: 680px) {
+  .gradesColumn{
+    width: .5em !important;
+  }
+  .subjectNameColumn{
+    width: 2.5em !important;
+  }
+  .numberOfRecordsRadio{
+    display: none !important;
+  }
+  .numberOfRecordsSelect{
+   display: unset !important; 
+  }
+}
+@media  screen and (min-height: 0px) {
+  .gradesTableRow{
+    height: 30px !important;
+  }
+}
+@media  screen and (min-height: 480px) {
+  .gradesTableRow{
+    height: 35px !important;
+  }
+}
+@media  screen and (min-height: 550px) {
+  .gradesTableRow{
+    height: 40px !important;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .loginCard {
+    margin: auto;
+    width: 80%;
+    padding: 30px 10px 40px 10px;
+    text-align: center;
+  }
+  .averageColumn{
+    padding-left:80px !important;
+  }
+  .averageColumnHeader{
+    padding-left: 80px !important;
+    padding-right: 0px !important;
+  }
+  .tableHeaderColumnFirst{
+    padding-left: 10px !important;
+  }
+  .tableDateColumn{
+    width: 3.5em;    
+  }
+}
+@media  screen and (max-width: 680px) {
+  .gradesColumnHeader{
+    padding-left: 20% !important;
+  }
+  .gradesColumn{
+    width: 1em !important;    
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+  .averageColumn{
+    width: 2em !important; 
+  }
+  .absenceColumn{
+    width: 4em !important; 
+  }
+  
+  a:hover {
+    text-decoration: none;
+  }
+
+  
+  /**
+   * Tooltip Styles
+   */
+  
+  /* Add this attribute to the element that needs a tooltip */
+  [data-tooltip] {
+    position: relative;
+    z-index: 2;
+
+  }
+  
+  /* Hide the tooltip content by default */
+  [data-tooltip]:before,
+  [data-tooltip]:after {
+    visibility: hidden;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Position tooltip above the element */
+  [data-tooltip]:before {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    margin-bottom: 5px;
+    margin-left: -100px;
+    padding: 7px;
+    width: 200px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #000;
+    background-color: hsla(0, 0%, 20%, 0.9);
+    color: #fff;
+    content: attr(data-tooltip);
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+  
+  /* Triangle hack to make tooltip look like a speech bubble */
+  [data-tooltip]:after {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid #000;
+    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+  }
+  
+  /* Show tooltip content on hover */
+  [data-tooltip]:hover:before,
+  [data-tooltip]:hover:after {
+    visibility: visible;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
+  }
