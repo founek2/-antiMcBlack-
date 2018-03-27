@@ -3,7 +3,7 @@ import {styles} from '../styles/styles';
 
 const TimeTable = (props) => {
       return (
-            <iframe src={'/trida/' + props.class} style={styles.timeTableIframe} title='rozvrh'></iframe>
+            <iframe src={'https://skalicky-vps.spse-net.cz/trida/' + props.class} style={styles.timeTableIframe} title='rozvrh'></iframe>
       )
 }
 

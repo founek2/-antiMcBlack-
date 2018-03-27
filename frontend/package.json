@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://skalicky-vps.spse-net.cz/intranet/",
   "dependencies": {
     "deepmerge": "^2.0.1",
     "material-ui": "^0.20.0",
@@ -20,5 +19,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:8087/"
+  "proxy": "http://localhost:8086/"
 }

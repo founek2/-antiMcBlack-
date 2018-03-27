@@ -12,16 +12,18 @@ import ClassificationTable from "./classificationTable";
 import ApiHandler from "../api";
 import ClickOutside from "react-click-outside";
 import Default from "./default";
-import { path, concat, assocPath, map, flatten, reverse } from "ramda";
+import { path, concat, assocPath, map, flatten, reverse, assoc, prop } from "ramda";
 import deepmerge from "deepmerge";
 import Dialog from "material-ui/Dialog";
 import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
 import TimeTable from "./timeTable";
 import mainDefaultState from "../constants/mainDefaultState";
+import mobileCheck from '../utils/mobilecheck';
 
 const getNameFromEvent = path(["target", "name"]);
 const getValueFromEvent = path(["target", "value"]);
+const getStorage = () => mobileCheck() ? localStorage : sessionStorage;
 
 const setInput = (name, value) => (state, props) =>
       assocPath(["inputs", name, "value"], value, state);
@@ -60,8 +62,8 @@ var globalTimoutMenuItemSelect;
 class Main extends Component {
       constructor(props) {
             super(props);
-            const absenceState = JSON.parse(sessionStorage.getItem("absenceState"));
-            const classificationState = JSON.parse(sessionStorage.getItem("classificationState"));
+            const absenceState = JSON.parse(getStorage().getItem("absenceState"));
+            const classificationState = JSON.parse(getStorage().getItem("classificationState"));
             this.state = mainDefaultState(absenceState, classificationState);
             this.apiHandler = new ApiHandler(this.props.handleError, this.props.handleLogOut);
 
@@ -103,23 +105,27 @@ class Main extends Component {
                   promise = new Promise(resolve => resolve());
             }
 
-            promise.then(() =>
+            promise.then(() =>{
+                  const {
+                        period
+                  } = this.state.classificationState;
                   this.apiHandler
-                        .getClassification(this.props.cid, this.state.classificationState.period)
+                        .getClassification(this.props.cid, period)
                         .then(classificationResp => {
-                              const newClassificationState = this.state.classificationState;
-                              newClassificationState.response = classificationResp;
+                              const newClassificationState = assocPath(["items", period], prop("items", classificationResp), this.state.classificationState)
 
                               this.setState({
                                     classificationState: newClassificationState
                               });
                               this._handleFetchingData("classificationState", false);
-                              sessionStorage.setItem(
+                              getStorage().setItem(
                                     "classificationState",
                                     JSON.stringify(this.state.classificationState)
                               );
                         })
+                  }
             );
+      
       };
       _loadDefAbsence = () => {
             this._handleFetchingData("absenceState", true);
@@ -131,56 +137,62 @@ class Main extends Component {
             } else {
                   promise = new Promise(resolve => resolve());
             }
-            promise.then(() =>
+            promise.then(() => {
+                  console.log("_loadDefAbsence")
+                  const {
+                        period,
+                  } = this.state.absenceState;
+
                   this.apiHandler
-                        .getAbsence(this.props.cid, this.state.absenceState.period, 0)
+                        .getAbsence(this.props.cid, period, 0)
                         .then(absenceResp => {
                               if (!absenceResp.error) {
                                     const numberOfWeekBefore = absenceResp.total - 1;
                                     this.apiHandler
                                           .getAbsence(
                                                 this.props.cid,
-                                                this.state.absenceState.period,
+                                                period,
                                                 numberOfWeekBefore
                                           )
                                           .then(absenceResp2 => {
+                                                const {
+                                                      absenceState
+                                                } = this.state;
+
                                                 const absenceRespMerged = deepmerge(
                                                       absenceResp2,
                                                       absenceResp
                                                 );
 
-                                                const newAbsenceState = this.state.absenceState;
-                                                newAbsenceState.items = [];
-                                                const newAbsenceState2 = deepmerge(
-                                                      newAbsenceState,
-                                                      {
-                                                            currentWeek: numberOfWeekBefore,
-                                                            totalWeek: absenceRespMerged.total,
-                                                            items: absenceRespMerged.items,
-                                                            numberOfRecords: 10
-                                                      }
-                                                );
+                                                const newAbsenceState = assocPath(["items", period], [], absenceState)
+                                                const newAbsenceState2 = assocPath(["currentWeek"], numberOfWeekBefore, newAbsenceState);
+                                                const newAbsenceState3 = assocPath(["totalWeek"], absenceRespMerged.total, newAbsenceState2);
+                                                const newAbsenceState4 = assocPath(["items", period], absenceRespMerged.items, newAbsenceState3);
+                                                const newAbsenceState5 = assocPath(["numberOfRecords"], 10, newAbsenceState4);
 
                                                 this.setState({
-                                                      absenceState: newAbsenceState2
+                                                      absenceState: newAbsenceState5
                                                 });
 
                                                 this._handleFetchingData("absenceState", false);
-                                                sessionStorage.setItem(
+                                                getStorage().setItem(
                                                       "absenceState",
                                                       JSON.stringify(this.state.absenceState)
                                                 );
+                                          
                                           });
+                                    
                               } else {
                                     this._handleFetchingData("absenceState", false);
                               }
                         })
+                  }
             );
       };
-      _handleNumberOfAbsenceRecords = (e, val, payload) => {
+      _handleNumberOfAbsenceRecords = (e, val, valueSelect) => {
             this._handleFetchingData("absenceState", true);
-
-            const value = payload ? payload : val;
+console.log("_handleNumberOfAbsenceRecords")
+            const value = valueSelect ? valueSelect : val;
             let newCurrentWeek = this.state.absenceState.currentWeek;
             const { numberOfRecords, currentWeek } = this.state.absenceState;
 
@@ -209,27 +221,30 @@ class Main extends Component {
                                     const newArrayResults = reverse(arrayResults);
                                     const absenceState = this.state.absenceState;
                                     const resItems = map(object => object.items, newArrayResults);
-                                    const newItems = concat(flatten(resItems), absenceState.items);
+                                    const newItems = concat(flatten(resItems), absenceState.items[absenceState.period]);
 
-                                    absenceState.numberOfRecords = value;
-                                    absenceState.currentWeek = newCurrentWeek;
-                                    absenceState.items = newItems;
+                                    const newAbsenceState1 = assoc("numberOfRecords", value, absenceState)
+                                    const newAbsenceState2 = assoc("currentWeek", newCurrentWeek, newAbsenceState1)
+                                    const newAbsenceState3 = assocPath(["items", absenceState.period], newItems, newAbsenceState2)
 
-                                    this.setState({ absenceState: absenceState });
+                                    this.setState({ absenceState: newAbsenceState3 });
 
                                     this._handleFetchingData("absenceState", false);
-
+                                    console.log("nove itemy", newAbsenceState3)
                                     absenceState.fetchingData = false; // trochu 💩
-                                    sessionStorage.setItem(
+                                    getStorage().setItem(
                                           "absenceState",
                                           JSON.stringify(absenceState)
                                     );
                               })
-                              .catch(e => this._handleFetchingData("absenceState", false));
+                              .catch(e => {
+                                    this._handleFetchingData("absenceState", false)
+                                    console.log(e)
+                              });
                   });
             } else {
                   const newAbsenceState = this.state.absenceState;
-
+                  console.log("nove itemi else", newAbsenceState)
                   newAbsenceState.numberOfRecords = value;
                   this.setState({
                         absenceState: newAbsenceState
@@ -262,15 +277,23 @@ class Main extends Component {
       };
       _handleChangePeriodAbsence = (e, isChecked) => {
             const newAbsenceState = this.state.absenceState;
+            const {
+                  items,
+                  period
+            } = newAbsenceState;
             newAbsenceState.period = isChecked ? 2 : 1;
             this.setState({ absenceState: newAbsenceState });
-            this._loadDefAbsence();
+            if (items[prop("period", newAbsenceState)].length === 0) this._loadDefAbsence();
       };
       _handleChangePeriodClassification = (e, isChecked) => {
             const newClassificationState = this.state.classificationState;
+            const {
+                  items,
+                  period
+            } = newClassificationState;
             newClassificationState.period = isChecked ? 2 : 1;
             this.setState({ classificationState: newClassificationState });
-            this._loadClassification();
+            if (items[prop("period", newClassificationState)].length === 0) this._loadClassification();
       };
       _handleChangePassword = async () => {
             const passwd = path(["inputs", "passwordNew", "value"], this.state);

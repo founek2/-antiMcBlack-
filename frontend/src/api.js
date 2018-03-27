@@ -1,7 +1,7 @@
 import encodeToken from './utils/encodeToken';
 import { curry } from 'ramda';
 
-const intranetApiUrl = '/intranet/api';
+const intranetApiUrl = '/api';
 export default class Api {
     constructor(errorHandler, logOut) {
         this.checkResponse =  curriedCheckResponse(logOut, errorHandler);

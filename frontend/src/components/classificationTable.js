@@ -92,8 +92,8 @@ const generateRowMobile = (row, maxValue, key) => {
         </Card>
     )
 }
-const renderResponse = (response, generate) => {
-    return response ? indexedMap((row, key) => generate(row, key), prop('items', response)) : null;
+const renderResponse = (items, generate) => {
+    return items ? indexedMap((row, key) => generate(row, key), items) : null;
 }
 
 class Grades extends Component {
@@ -116,7 +116,7 @@ class Grades extends Component {
         this.setState({ width: window.innerWidth });
     };
 
-    _renderForDesktop = (response) => {
+    _renderForDesktop = (items) => {
         return (
             <div>
                 <Table selectable={false}>
@@ -125,23 +125,23 @@ class Grades extends Component {
                     </TableHeader>
                     {generateHeaderRowDesktop(5)}
                     <TableBody displayRowCheckbox={false}>
-                        {renderResponse(response, generateRow)}
+                        {renderResponse(items, generateRow)}
                     </TableBody>
                 </Table>
             </div>
         )
     }
-    _renderForMobile = (response) => {
+    _renderForMobile = (items) => {
         return (
             <div>
-                {renderResponse(response, generateRowMobile)}
+                {renderResponse(items, generateRowMobile)}
             </div>
         )
     }
     render() {
         const { width } = this.state;
-        const { response, classificationState } = this.props;
-        const { period, fetchingData } = classificationState;
+        const { classificationState } = this.props;
+        const { period, fetchingData, items } = classificationState;
         const isMobile = width <= 540;
         const render = isMobile ? this._renderForMobile : this._renderForDesktop
         return (
@@ -163,7 +163,7 @@ class Grades extends Component {
                     </div>
                     {fetchingData ? <div className='loader-5' style={{ marginTop: '20px' }}><span></span></div> : null}
                 </div>
-                {render(response)}
+                {render(items[period])}
             </div >
         );
     }

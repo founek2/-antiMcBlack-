@@ -1,6 +1,7 @@
 import {
       red900,
       purple600,
+      pink800,
       pink500,
       pink400,
       pink300,
@@ -28,7 +29,7 @@ export const styles = {
             borderColor: pink500
       },
       underlineFocusStyle: {
-            //       borderColor: purple600,
+                   borderColor: pink800,
       },
       loginButton: {
             width: "140px"
