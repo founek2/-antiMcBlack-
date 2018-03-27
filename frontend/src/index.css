@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   height: inherit;
+  font-family: 'Roboto', sans-serif;
 }
 #root {
   height: 100%;
@@ -230,7 +231,7 @@ body {
 @media screen and (max-width: 580px) {
   .loginCard {
     margin: auto;
-    width: 80%;
+    width: 100%;
     padding: 30px 10px 40px 10px;
     text-align: center;
   }
@@ -246,6 +247,9 @@ body {
   }
   .tableDateColumn{
     width: 3.5em;    
+  }
+  .defaultCard {
+    width: 100%
   }
 }
 @media  screen and (max-width: 680px) {

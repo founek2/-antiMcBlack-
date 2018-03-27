@@ -19,9 +19,11 @@ import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
 import TimeTable from "./timeTable";
 import mainDefaultState from "../constants/mainDefaultState";
+import mobileCheck from '../utils/mobilecheck';
 
 const getNameFromEvent = path(["target", "name"]);
 const getValueFromEvent = path(["target", "value"]);
+const getStorage = () => mobileCheck() ? localStorage : sessionStorage;
 
 const setInput = (name, value) => (state, props) =>
       assocPath(["inputs", name, "value"], value, state);
@@ -60,8 +62,8 @@ var globalTimoutMenuItemSelect;
 class Main extends Component {
       constructor(props) {
             super(props);
-            const absenceState = JSON.parse(sessionStorage.getItem("absenceState"));
-            const classificationState = JSON.parse(sessionStorage.getItem("classificationState"));
+            const absenceState = JSON.parse(getStorage().getItem("absenceState"));
+            const classificationState = JSON.parse(getStorage().getItem("classificationState"));
             this.state = mainDefaultState(absenceState, classificationState);
             this.apiHandler = new ApiHandler(this.props.handleError, this.props.handleLogOut);
 
@@ -116,7 +118,7 @@ class Main extends Component {
                                     classificationState: newClassificationState
                               });
                               this._handleFetchingData("classificationState", false);
-                              sessionStorage.setItem(
+                              getStorage().setItem(
                                     "classificationState",
                                     JSON.stringify(this.state.classificationState)
                               );
@@ -136,6 +138,7 @@ class Main extends Component {
                   promise = new Promise(resolve => resolve());
             }
             promise.then(() => {
+                  console.log("_loadDefAbsence")
                   const {
                         period,
                   } = this.state.absenceState;
@@ -172,7 +175,7 @@ class Main extends Component {
                                                 });
 
                                                 this._handleFetchingData("absenceState", false);
-                                                sessionStorage.setItem(
+                                                getStorage().setItem(
                                                       "absenceState",
                                                       JSON.stringify(this.state.absenceState)
                                                 );
@@ -188,7 +191,7 @@ class Main extends Component {
       };
       _handleNumberOfAbsenceRecords = (e, val, valueSelect) => {
             this._handleFetchingData("absenceState", true);
-
+console.log("_handleNumberOfAbsenceRecords")
             const value = valueSelect ? valueSelect : val;
             let newCurrentWeek = this.state.absenceState.currentWeek;
             const { numberOfRecords, currentWeek } = this.state.absenceState;
@@ -218,27 +221,30 @@ class Main extends Component {
                                     const newArrayResults = reverse(arrayResults);
                                     const absenceState = this.state.absenceState;
                                     const resItems = map(object => object.items, newArrayResults);
-                                    const newItems = concat(flatten(resItems), absenceState.items);
+                                    const newItems = concat(flatten(resItems), absenceState.items[absenceState.period]);
 
                                     const newAbsenceState1 = assoc("numberOfRecords", value, absenceState)
-                                    const newAbsenceState2 = assoc("currentWeek", newCurrentWeek, newAbsenceState2)
-                                    const newAbsenceState3 = assocPath(["items", absenceState.period], newItems, newAbsenceState3)
+                                    const newAbsenceState2 = assoc("currentWeek", newCurrentWeek, newAbsenceState1)
+                                    const newAbsenceState3 = assocPath(["items", absenceState.period], newItems, newAbsenceState2)
 
                                     this.setState({ absenceState: newAbsenceState3 });
 
                                     this._handleFetchingData("absenceState", false);
-
+                                    console.log("nove itemy", newAbsenceState3)
                                     absenceState.fetchingData = false; // trochu 💩
-                                    sessionStorage.setItem(
+                                    getStorage().setItem(
                                           "absenceState",
                                           JSON.stringify(absenceState)
                                     );
                               })
-                              .catch(e => this._handleFetchingData("absenceState", false));
+                              .catch(e => {
+                                    this._handleFetchingData("absenceState", false)
+                                    console.log(e)
+                              });
                   });
             } else {
                   const newAbsenceState = this.state.absenceState;
-
+                  console.log("nove itemi else", newAbsenceState)
                   newAbsenceState.numberOfRecords = value;
                   this.setState({
                         absenceState: newAbsenceState

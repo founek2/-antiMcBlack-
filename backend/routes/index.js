@@ -45,7 +45,8 @@ router.post("/api", function(req, res, next) {
       req.headers.referer = "https://i3.spse.cz/";
 
       var re = () =>
-            fetch("http://fourpoint.tk:7867/intranetapiproxy", {
+     //       fetch("http://10.8.0.10:3333/intranetapiproxy", {
+      fetch("https://api.spse.cz/i3/index.php", {
                   method: "POST",
                   body: JSON.stringify(req.body),
                   headers: req.headers

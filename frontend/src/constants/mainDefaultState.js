@@ -28,11 +28,6 @@ export default (absenceState, classificationState) => ({
                         2: []
                   },
               },
-      errorState: {
-            fetchError: "",
-            fetchErrorMsg: "",
-            errorOpen: false
-      },
       inputs: {
             passwordNew: {
                   value: "",

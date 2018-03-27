@@ -6,6 +6,9 @@ import Snackbar from 'material-ui/Snackbar';
 import 'typeface-roboto'
 import ApiHandler from './api';
 import { path } from 'ramda';
+import mobileCheck from './utils/mobilecheck';
+
+const getStorage = () => mobileCheck() ? localStorage : sessionStorage;
 
 class App extends Component {
   _apiErrorCallback = (e) => {
@@ -19,9 +22,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    const cid = sessionStorage.getItem('cid');
-    const userName = sessionStorage.getItem('userName');
-    const loginMessage = sessionStorage.getItem('loginMessage');
+    const cid = getStorage().getItem('cid');
+    const userName = getStorage().getItem('userName');
+    const loginMessage = getStorage().getItem('loginMessage');
     if (cid) {
       this.state = {
         logged: true,
@@ -55,9 +58,9 @@ class App extends Component {
       .then((result) => {
         if (path(['login'], result) === 'success') {
           this.setState({ logged: true, cid: path(['cid'], result), userName: userName, loginMessage: path(['message'], result), logError: '' });
-          sessionStorage.setItem('cid', path(['cid'], result), );
-          sessionStorage.setItem('userName', userName);
-          sessionStorage.setItem('loginMessage', path(['message'], result));
+          getStorage().setItem('cid', path(['cid'], result), );
+          getStorage().setItem('userName', userName);
+          getStorage().setItem('loginMessage', path(['message'], result));
         } else if (path(['login'], result) === 'denied') {
           this.setState({ logged: false, logError: 'Špatné jméno nebo heslo' });
         }
@@ -70,7 +73,7 @@ class App extends Component {
       logged: false,
       cid: undefined,
     })
-    sessionStorage.clear();
+    getStorage().clear();
     this.apiHandler.logOut(this.state.cid);
   }
   _renderContent = () =>
