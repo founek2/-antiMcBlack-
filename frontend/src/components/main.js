@@ -191,7 +191,7 @@ class Main extends Component {
       };
       _handleNumberOfAbsenceRecords = (e, val, valueSelect) => {
             this._handleFetchingData("absenceState", true);
-console.log("_handleNumberOfAbsenceRecords")
+
             const value = valueSelect ? valueSelect : val;
             let newCurrentWeek = this.state.absenceState.currentWeek;
             const { numberOfRecords, currentWeek } = this.state.absenceState;

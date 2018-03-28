@@ -1,2 +1,9 @@
 /.vscode
 /backend/node_modules
+/backend/public/
+/frontend/node_modules
+/.idea
+/.history
+/.DS_STORE
+/backend/.DS_STORE
+/backend/db.sqlite

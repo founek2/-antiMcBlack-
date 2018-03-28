@@ -1,3 +1,9 @@
+/**
+ * create single token from username and passwd
+ * @param {String} username 
+ * @param {String} password
+ */
+
 export default function(a, b) {
     var d, c = (255 * Math.random() ^ 255 * Math.random() + 255 * Math.random()) & 255, e = 15 < c ? c.toString(16) : "0" + c.toString(16);
     a = ":" + a + ":" + b + ":" + Date.now();

@@ -1,3 +1,8 @@
+/**
+ * if param dont exist, then return default values
+ * @param {Object} absenceState
+ * @param {Object} classificationState
+ */
 export default (absenceState, classificationState) => ({
       leftMenuOpen: false,
       activeComponent: "default",
