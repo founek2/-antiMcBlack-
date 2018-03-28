@@ -1,0 +1,1 @@
+export const numberOfRecordsArray = [10, 20, 30, 50];

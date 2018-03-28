@@ -7,43 +7,48 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { insert, merge, reverse, slice, lt } from 'ramda';
+import { insert, merge, reverse, slice, lt, takeWhile, map } from 'ramda';
 import itemsValue from '../utils/valuesFromAbsenceItems';
 import { styles } from '../styles/styles';
-import mapIndexed from '../utils/mapIndex';
+import indexedMap from '../utils/indexedMap';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import { Card } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import {numberOfRecordsArray} from '../constants/index';
 
-const types = [
-  0, // 0 normální hodina
-  1, // 1 nová absence
-  2, // 2 omluvená rodiné důvody
-  3, // 3 dřívější odchod ????
-  4, // 4 pozdní příchod
-  5, // 5 školní akce
-]
 const generateHeaderRow = (headerArray) => (
   <TableRow >
-    {mapIndexed((item, idx) =>
+    {indexedMap((item, idx) =>
       <TableHeaderColumn key={idx} style={styles.tableRowColumme} className={idx === 0 ? 'tableHeaderColumnFirst' : null}>{item}</TableHeaderColumn>, headerArray)}
   </TableRow >
 );
 
-const generateRows = (items, numberOfRecords) => mapIndexed(generateColumns, slice(0, numberOfRecords, reverse(items)));
+const generateRows = (items, numberOfRecords) => indexedMap(generateColumns, slice(0, numberOfRecords, reverse(items)));
 
 const generateColumns = (items, idx) => {
 
-  const columns = mapIndexed(generateColumn, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
+  const columns = indexedMap(generateColumn, itemsValue(items.items, 11)) //číslo pro počet buněk (doplní prázdné)
   const columnsWithFirst = insert(0, (<TableRowColumn key={-1} style={styles.tableRowColumme} className='tableDateColumn'>{items.header.value.substring(0, 7)}</TableRowColumn>), columns)
   return (<TableRow key={idx} >{columnsWithFirst}</TableRow>);
 }
 
 const generateColumn = (item, idx) => (<TableRowColumn key={idx} style={merge(styles.absenceKinds[item.kind], styles.tableRowColumme)} className='tableRowColumn' data-tooltip={item.comment[2]}>{item.value}</TableRowColumn>);
 
-const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords}) => (
+const createRadButton = (value) => (<RadioButton
+      value={value}
+      label={value}
+      style={styles.radioButton}
+    />)
+const generateRadioButtons = (totalWeek) => {
+      var isNotParNumber = (totalNum) => x => x < totalNum;
+console.log(isNotParNumber(totalWeek * 5), numberOfRecordsArray)
+      const wantedNumbers = takeWhile(isNotParNumber(totalWeek * 5), numberOfRecordsArray);
+      const radioButtons = map(createRadButton, wantedNumbers)
+      console.log(radioButtons)
+}
+const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords, totalWeek}) => (
   <Card >
     <div style={styles.absenceTop}>
       <div style={styles.absencePeriodSwitchContainer}>
@@ -71,6 +76,7 @@ const AbsenceTable = ({absenceState, handlePeriodChange, handleNumberOfRecords})
         iconStyle={styles.absenceRadioButtonIcon}
         className="numberOfRecordsRadio"
       >
+      {generateRadioButtons(totalWeek)}
         <RadioButton
           value={5}
           label="5"
