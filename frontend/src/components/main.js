@@ -230,8 +230,7 @@ class Main extends Component {
                                     this.setState({ absenceState: newAbsenceState3 });
 
                                     this._handleFetchingData("absenceState", false);
-                                    console.log("nove itemy", newAbsenceState3)
-                                    absenceState.fetchingData = false; // trochu 💩
+                                    absenceState.fetchingData = false; // a little 💩
                                     getStorage().setItem(
                                           "absenceState",
                                           JSON.stringify(absenceState)
