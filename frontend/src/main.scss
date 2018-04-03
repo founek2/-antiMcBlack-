@@ -1,0 +1,229 @@
+$badass: #bada55;
+$black: black;
+$white: white;
+
+body {
+      margin: 0;
+      background-color: $badass;
+}
+.panda {
+      margin: auto;
+      width: 122px;
+      position: relative;
+      top: 28px;
+      .ears {
+            .leftEar {
+                  background-color: $black;
+                  width: 20px;
+            }
+      }
+      .head {
+            position: relative;
+            border-radius: 50%;
+            width: 110px;
+            height: 110px;
+            border: 6px solid $black;
+            background-color: $white;
+            z-index: 20;
+      }
+      .eyes {
+            position: relative;
+            .leftEye {
+                  width: 34px;
+                  height: 39px;
+                  background-color: black;
+                  position: absolute;
+                  left: 13px;
+                  top: 27px;
+                  border-radius: 25px / 29px;
+                  transform: rotate(20deg);
+
+                  .irisEye {
+                        width: 12px;
+                        height: 14px;
+                        background-color: white;
+                        position: absolute;
+                        left: 10px;
+                        top: 6px;
+                        border-radius: 12px / 14px;
+                        transform: rotate(15deg);
+                        -webkit-animation: blinking 9s infinite; /* Safari 4.0 - 8.0 */
+                        animation: blinking 9s infinite;
+                  }
+            }
+            .rightEye {
+                  width: 34px;
+                  height: 39px;
+                  background-color: black;
+                  position: absolute;
+                  left: 65px;
+                  top: 27px;
+                  border-radius: 25px / 29px;
+                  transform: rotate(-20deg);
+
+                  .irisEye {
+                        width: 12px;
+                        height: 14px;
+                        background-color: white;
+                        position: absolute;
+                        left: 10px;
+                        top: 6px;
+                        border-radius: 12px / 14px;
+                        transform: rotate(-15deg);
+                        -webkit-animation: blinking 9s infinite; /* Safari 4.0 - 8.0 */
+                        animation: blinking 9s infinite;
+                  }
+            }
+      }
+      .nose {
+            position: relative;
+            left: 45px;
+            top: 70px;
+
+            .lineDown {
+                  width: 6px;
+                  height: 13px;
+                  background-color: $black;
+                  position: absolute;
+                  left: 9px;
+                  top: 13px;
+            }
+      }
+      .nose:before,
+      .nose:after {
+            position: absolute;
+            content: '';
+            left: 12px;
+            top: 0;
+            width: 12px;
+            height: 17px;
+            background: $black;
+            -moz-border-radius: 50px 50px 0 0;
+            border-radius: 50px 50px 0 0;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            -webkit-transform-origin: 0 100%;
+            -moz-transform-origin: 0 100%;
+            -ms-transform-origin: 0 100%;
+            -o-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+      }
+      .nose:after {
+            left: 0;
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+            -webkit-transform-origin: 100% 100%;
+            -moz-transform-origin: 100% 100%;
+            -ms-transform-origin: 100% 100%;
+            -o-transform-origin: 100% 100%;
+            transform-origin: 100% 100%;
+      }
+      .mouth {
+            position: absolute;
+            width: 70px;
+            height: 20px;
+            overflow: hidden;
+            top: 85px;
+            left: 33px;
+            .line {
+                  position: absolute;
+                  top: -30px;
+                  width: 35px;
+                  height: 30px;
+                  border-radius: 40px;
+                  border: 6px solid $black;
+            }
+      }
+      .ears {
+            position: relative;
+            z-index: 1;
+            .leftEar {
+                  position: absolute;
+                  width: 50px;
+                  height: 50px;
+                  background-color: $black;
+                  border-radius: 35px;
+                  left: -13px;
+            }
+            .rightEar {
+                  position: absolute;
+                  width: 50px;
+                  height: 50px;
+                  background-color: $black;
+                  border-radius: 35px;
+                  left: 85px;
+            }
+      }
+      .hands {
+            position: relative;
+            z-index: 21;
+            top: 0px;
+            -webkit-transition: top 1s; /* Safari */
+            transition: top 1s;
+      }
+      .hands:after,
+      .hands:before {
+            top: 0px;
+            position: absolute;
+            content: '';
+            width: 60px;
+            height: 30px;
+            background-color: $black;
+            -webkit-transition: width 2s; /* Safari */
+            transition: width 2s;
+      }
+      .hands:before {
+            left: 0px;
+            border-radius: 0px 10px 10px 0px;
+      }
+      .hands:after {
+            right: 0px;
+            border-radius: 10px 0px 0px 10px;
+      }
+      &.handsUp {
+         .hands{
+                  top: -74px;
+         }
+      }
+      &.handsUp {
+            .hands:before{
+                  transform: rotate(-40deg)
+            }
+            
+      }
+      &.handsUp {
+            .hands:after {
+                  transform: rotate(40deg)
+            }
+
+      }
+}
+.window {
+      margin: 0 auto;
+      margin-top: -35px;
+      width: 160px;
+      height: 150px;
+      border-radius: 80px;
+      position: relative;
+      overflow: hidden;
+}
+
+          /* Safari 4.0 - 8.0 */
+          @-webkit-keyframes blinking {
+            from {top: 0px;}
+            to {top: 200px;}
+        }
+        
+        /* Standard syntax */
+        @keyframes blinking {
+            0% {}
+            70% {height: 14px;}
+            88% {height: 0px;}
+            100% {height: 14px;}
+        }
