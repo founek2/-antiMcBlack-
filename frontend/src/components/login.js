@@ -64,9 +64,7 @@ class Login extends Component {
             if (len <= 25) this.setState(setInput(name, val));
 
             const input = this[name].input;
-            console.log(input.selectionStart)
             const values = getCursorXY(input, input.selectionStart);
-            console.log(values, name)
             this.setState(prevState => assocPath(["inputs", name, "cursorPosition"], values.x, prevState));
       };
       _handleClickSelection = e => {
@@ -151,6 +149,7 @@ class Login extends Component {
                                           }
                                           onFocus={() => this._changeFocus("username", true)}
                                           onBlur={() => this._changeFocus("username", false)}
+                                          autocomplete="off"
                                     />
                                     <div className="relative">
                                           <ClickOutside
@@ -198,6 +197,7 @@ class Login extends Component {
                                                       onFocus={() =>
                                                             this._changeFocus("password", true)
                                                       }
+                                                      autocomplete="off"
                                                 />
                                                 <div
                                                       className={

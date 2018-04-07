@@ -138,7 +138,6 @@ class Main extends Component {
                   promise = new Promise(resolve => resolve());
             }
             promise.then(() => {
-                  console.log("_loadDefAbsence")
                   const {
                         period,
                   } = this.state.absenceState;
