@@ -27,9 +27,10 @@ app.use(compression());
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'", 'skalicky-vps.spse-net.cz'],
+      imgSrc: ["data:", "'self'"],
+    defaultSrc: ["'self'", 'mcwhite.spse-net.cz'],
     scriptSrc: ["'self'"],
-    styleSrc: ["'self'"],
+    styleSrc: ["'sha256-D8Sj8qhd4FvnVwN5w9riiArwsqYOEwHolv228Ic6Vqk='", "'self',"],
   }
 }));
 app.use(helmet.referrerPolicy({ policy: 'origin' }));

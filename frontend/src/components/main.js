@@ -138,7 +138,6 @@ class Main extends Component {
                   promise = new Promise(resolve => resolve());
             }
             promise.then(() => {
-                  console.log("_loadDefAbsence")
                   const {
                         period,
                   } = this.state.absenceState;
@@ -191,7 +190,7 @@ class Main extends Component {
       };
       _handleNumberOfAbsenceRecords = (e, val, valueSelect) => {
             this._handleFetchingData("absenceState", true);
-console.log("_handleNumberOfAbsenceRecords")
+
             const value = valueSelect ? valueSelect : val;
             let newCurrentWeek = this.state.absenceState.currentWeek;
             const { numberOfRecords, currentWeek } = this.state.absenceState;
@@ -230,8 +229,7 @@ console.log("_handleNumberOfAbsenceRecords")
                                     this.setState({ absenceState: newAbsenceState3 });
 
                                     this._handleFetchingData("absenceState", false);
-                                    console.log("nove itemy", newAbsenceState3)
-                                    absenceState.fetchingData = false; // trochu 💩
+                                    absenceState.fetchingData = false; // a little 💩
                                     getStorage().setItem(
                                           "absenceState",
                                           JSON.stringify(absenceState)

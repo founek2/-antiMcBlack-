@@ -1,4 +1,11 @@
 import { keys } from 'ramda';
+
+
+/**
+ * Return better object with filled empty object based on lenght param
+ * @param {Object} obj 
+ * @param {Number} length 
+ */
 var valuesFromAbsenceItems = (obj, length) => {
   var props = keys(obj);
   var vals = [];
