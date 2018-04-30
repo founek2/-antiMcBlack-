@@ -2,31 +2,15 @@ var express = require("express");
 var router = express.Router();
 const fetch = require("node-fetch");
 var path = require("path");
-var sqlite = require("sqlite");
 var Promise = require("bluebird");
 
 
-
-var db;
-const dbPromise = sqlite
-      .open("./db.sqlite", { Promise })
-      .then(con => {
-		con.run('CREATE TABLE IF NOT EXISTS log (ID INTEGER PRIMARY KEY, time INTEGER, cmd TEXT)')
-            console.log("connected to db");
-            db = con;
-      })
-      .catch(e => console.log(e));
 var fetchesFront = [];
 
-var saveDataToLog = function(date, cmd) {
-      console.log("saved");
-      db.run("INSERT INTO log (time, cmd) VALUES (?, ?)", date.getTime(), cmd);
-};
 var handleSendReq = function() {
       var item = fetchesFront[0];
 
       if (item) {
-            saveDataToLog(new Date(), item.res.req.body.command);
             item
                   .fetch()
                   .then(response => response.json())
