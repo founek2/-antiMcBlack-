@@ -115,7 +115,7 @@ class Login extends Component {
                         <Card className="loginCard">
                               <CardTitle title="- McWhite -" titleColor={pink500} />
                               <CardText>
-                                    <div class="window">
+                                    <div className="window">
                                           <PandaFace
                                                 handsUp={password.focus}
                                                 inputNum={getActiveInputNum(username, password)}
@@ -124,6 +124,7 @@ class Login extends Component {
                                                 seeking={!password.hidden}
                                           />
                                     </div>
+                                    <form autocomplete="off">
                                     <TextField
                                           onClick={this._handleClickSelection}
                                           ref={(el) => this.username = el}
@@ -149,7 +150,7 @@ class Login extends Component {
                                           }
                                           onFocus={() => this._changeFocus("username", true)}
                                           onBlur={() => this._changeFocus("username", false)}
-                                          autocomplete="off"
+                                          autocomplete="nope"
                                     />
                                     <div className="relative">
                                           <ClickOutside
@@ -197,7 +198,7 @@ class Login extends Component {
                                                       onFocus={() =>
                                                             this._changeFocus("password", true)
                                                       }
-                                                      autocomplete="off"
+                                                      autocomplete="new-password"
                                                 />
                                                 <div
                                                       className={
@@ -210,6 +211,7 @@ class Login extends Component {
                                                 />
                                           </ClickOutside>
                                     </div>
+                                    </form>
                               </CardText>
                               <CardActions>
                                     <RaisedButton
