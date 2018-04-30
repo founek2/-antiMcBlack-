@@ -31,6 +31,7 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'", 'mcwhite.spse-net.cz'],
     scriptSrc: ["'self'"],
     styleSrc: ["'sha256-D8Sj8qhd4FvnVwN5w9riiArwsqYOEwHolv228Ic6Vqk='", "'self',"],
+    connectSrc: ["https://api.spse.cz/i3/index.php"],
   }
 }));
 app.use(helmet.referrerPolicy({ policy: 'origin' }));
