@@ -42,7 +42,6 @@ $white: white;
                         top: 6px;
                         border-radius: 12px / 14px;
                         transition: transform 0.5s;
-                        -webkit-animation: blinking 9s infinite; /* Safari 4.0 - 8.0 */
                         animation: blinking 9s infinite;
                   }
             }
@@ -65,7 +64,6 @@ $white: white;
                         top: 6px;
                         border-radius: 12px / 14px;
                         transition: transform 0.5s;
-                        -webkit-animation: blinking 9s infinite; /* Safari 4.0 - 8.0 */
                         animation: blinking 9s infinite;
                   }
             }
@@ -93,30 +91,13 @@ $white: white;
             width: 12px;
             height: 17px;
             background: $black;
-            -moz-border-radius: 50px 50px 0 0;
             border-radius: 50px 50px 0 0;
-            -webkit-transform: rotate(-45deg);
-            -moz-transform: rotate(-45deg);
-            -ms-transform: rotate(-45deg);
-            -o-transform: rotate(-45deg);
             transform: rotate(-45deg);
-            -webkit-transform-origin: 0 100%;
-            -moz-transform-origin: 0 100%;
-            -ms-transform-origin: 0 100%;
-            -o-transform-origin: 0 100%;
             transform-origin: 0 100%;
       }
       .nose:after {
             left: 0;
-            -webkit-transform: rotate(45deg);
-            -moz-transform: rotate(45deg);
-            -ms-transform: rotate(45deg);
-            -o-transform: rotate(45deg);
             transform: rotate(45deg);
-            -webkit-transform-origin: 100% 100%;
-            -moz-transform-origin: 100% 100%;
-            -ms-transform-origin: 100% 100%;
-            -o-transform-origin: 100% 100%;
             transform-origin: 100% 100%;
       }
       .mouth {
@@ -159,7 +140,6 @@ $white: white;
             position: relative;
             z-index: 21;
             top: 0px;
-            -webkit-transition: top 0.5s linear; /* Safari */
             transition: top  0.3s linear;
       }
       .hands:after,
@@ -170,8 +150,6 @@ $white: white;
             width: 80px;
             height: 30px;
             background-color: $black;
-            -webkit-transition: width  0.3s,
-                              transform  0.3s, top 0.3s; /* Safari */
             transition: width  0.3s,
                         transform  0.3s, top 0.3s;
       }
@@ -229,7 +207,6 @@ $white: white;
         .eye {
             opacity: 0.4;
             filter: grayscale(100%);
-            -webkit-filter: grayscale(100%);
             width: 23px;
             height: 20px;
             position: absolute;
