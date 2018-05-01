@@ -28,7 +28,7 @@ router.post("/api", function(req, res, next) {
       req.headers.origin = "https://i3.spse.cz";
       req.headers.referer = "https://i3.spse.cz/";
 
-      var re = () =>
+ /*     var re = () =>
      //       fetch("http://10.8.0.10:3333/intranetapiproxy", {
       fetch("https://api.spse.cz/i3/index.php", {
                   method: "POST",
@@ -36,7 +36,7 @@ router.post("/api", function(req, res, next) {
                   headers: req.headers
             });
 
-      fetchesFront.push({ fetch: re, res: res });
+      fetchesFront.push({ fetch: re, res: res });*/
 });
 
 module.exports = router;
