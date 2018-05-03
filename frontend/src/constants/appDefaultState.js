@@ -20,9 +20,9 @@ export default (cid, userName, loginMessage) => {
             return {
                   logged: false,
                   errorState: {
-                        fetchErrorMsg: "Bez připojení k internetu",
-                        errorOpen: false,
-                        autoHideDuration: 3000
+                        fetchErrorMsg: "Toto není oficiální klient SPŠE a škola neručí za jeho bezpečnost.",
+                        errorOpen: true,
+                  //      autoHideDuration: 3000
                   },
                   logInProggres: false
             };

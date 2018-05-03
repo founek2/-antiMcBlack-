@@ -5,7 +5,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Snackbar from "material-ui/Snackbar";
 import "typeface-roboto";
 import ApiHandler from "./api";
-import { path } from "ramda";
+import { path, assoc } from "ramda";
 import mobileCheck from "./utils/mobilecheck";
 import appDefaultState from "./constants/appDefaultState";
 
@@ -26,12 +26,17 @@ class App extends Component {
             this.setState({ logInProggres: true });
             this.apiHandler.logIn(userName, passwd).then(result => {
                   if (path(["login"], result) === "success") {
+                        const newErrorState = this.state.errorState;
+                        newErrorState.duration = 3000;
+                        newErrorState.errorOpen = false;
+
                         this.setState({
                               logged: true,
                               cid: path(["cid"], result),
                               userName: userName,
                               loginMessage: path(["message"], result),
-                              logError: ""
+                              logError: "",
+                              errorState: newErrorState,
                         });
                         getStorage().setItem("cid", path(["cid"], result));
                         getStorage().setItem("userName", userName);
@@ -65,7 +70,9 @@ class App extends Component {
       };
 
       _closeError = () => {
-            this.setState({ errorState: { errorOpen: false } });
+            const errorState = this.state.errorState;
+            const newErrorState = assoc("errorOpen", false, errorState)
+            this.setState({ errorState: newErrorState });
       };
 
       _renderContent = () =>
@@ -86,7 +93,10 @@ class App extends Component {
                         logError={this.state.logError}
                   />
             );
-
+            _checkSnackbarCloseOpt = (event) =>{
+                  //ignoring clickAway await
+                  if(event === "timeout") this._closeError();
+            }
       render() {
             return (
                   <MuiThemeProvider>
@@ -98,6 +108,7 @@ class App extends Component {
                                     autoHideDuration={this.state.errorState.autoHideDuration}
                                     action="Zavřít"
                                     onActionClick={this._closeError}
+                                    onRequestClose={this._checkSnackbarCloseOpt}
                               />
                         </div>
                   </MuiThemeProvider>
