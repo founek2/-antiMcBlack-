@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "startForever": "forever start ./bin/www",
+    "startForever": "env NODE_ENV=production forever start ./bin/www",
     "stopForever": "forever stop ./bin/www",
     "updateFrontEnd": "npm run build --prefix ../frontend && rm -rf public/* && cp -R ../frontend/build/* public/"
   },
