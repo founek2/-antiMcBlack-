@@ -28,6 +28,8 @@ app.use(compression());
 app.use(helmet.contentSecurityPolicy({
   directives: {
       imgSrc: ["data:", "'self'"],
+      frameSrc: ["https://skalicky-vps.spse-net.cz"],
+      connectSrc: ["'self'","https://api.spse.cz/i3/index.php"],
     defaultSrc: ["'self'", 'mcwhite.spse-net.cz'],
     scriptSrc: ["'self'"],
     styleSrc: ["'sha256-D8Sj8qhd4FvnVwN5w9riiArwsqYOEwHolv228Ic6Vqk='", "'self',"],
